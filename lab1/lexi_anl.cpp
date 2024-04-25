@@ -3,6 +3,7 @@
 #define IS_LETTER 0
 #define IS_DIGIT 1
 #define DEC 2
+#define ILDEC -2
 #define OCT 3
 #define ILOCT -3
 #define HEX 4
@@ -53,6 +54,9 @@ int scan_digit(std::string in){
             if(in[i]>='0'&&in[i]<='9'){
                 i++;
                 continue;
+            }else if(in[i]>='a'&&in[i]<='z'||in[i]>='A'&&in[i]<='Z'){
+                state=11;
+                continue;
             }
             std::cout<<"error5"<<std::endl;
         }
@@ -65,7 +69,7 @@ int scan_digit(std::string in){
             }else if(in[i]>='0' && in[i]<='7'){
                 i++;
                 continue;
-            }else if(in[i]>='8'&&in[i]<='9'){
+            }else if(in[i]>='8'&&in[i]<='9'||in[i]>='a'&&in[i]<='z'||in[i]>='A'&&in[i]<='Z'){
                 state=9;
                 continue;
             }
@@ -99,6 +103,8 @@ int scan_digit(std::string in){
         }
         else if(state==10){
             return ILHEX;
+        }else if(state==11){
+            return ILDEC;
         }
     }
     // std::string token("");
