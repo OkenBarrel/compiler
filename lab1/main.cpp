@@ -1,5 +1,6 @@
 #include <iostream>
 #include "lexi_anl.h"
+#include "lexi_class.h"
 
 
 int main(){
@@ -9,16 +10,16 @@ int main(){
     std::string token;
     int i=0;
     int type;
-    int res;
+    symbolTableNode res;
 
     while(std::cin>>in){
         
         type=tellType(in[0]);
         switch(type){
-            token.clear();
+            // token.clear();
             case IS_DIGIT:
                 res=scan_digit(in);
-                std::cout<<res<<std::endl;
+                std::cout<<res.toString()<<std::endl;
             case IS_LETTER:
                 scan_letter();
                 break;

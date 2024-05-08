@@ -1,5 +1,16 @@
 #include <iostream>
+#include <tuple>
+#include <string>
+#include "lexi_class.h"
 // #include <lexi_anl.h>
+enum TOKEN{
+    DEC,
+    ILEDC,
+    OCT,
+    ILOCT,
+    HEX,
+    ILHEX,
+};
 #define IS_LETTER 0
 #define IS_DIGIT 1
 #define DEC 2
@@ -14,9 +25,13 @@
 void hello(){
     std::cout<<"heeeeellooooo!!"<<std::endl;
 }
-int scan_digit(std::string in){
+symbolTableNode scan_digit(std::string in){
     int state=0;
     int i=0;
+    // std::tuple<TOKEN,int> result;
+    std::string t;
+    int code;
+    int prop;
     while(state>=0){
         // std::cout<<"state="<<state<<"letter="<<in[i]<<std::endl;
         if(state==0){
@@ -61,7 +76,10 @@ int scan_digit(std::string in){
             std::cout<<"error5"<<std::endl;
         }
         else if(state==3){
-            return DEC;
+            t="DEC";
+            code=DEC;
+            prop=std::stoi(in.substr(0,i));
+            // return DEC;
         }else if(state==4){
             
             if(i==in.size()){
@@ -84,7 +102,10 @@ int scan_digit(std::string in){
                 i++;
             }
         }else if(state==5){
-            return OCT;
+            t="OCT";
+            code=OCT;
+            prop=std::stoi(in.substr(0,i),0,8);
+            // return OCT;
         }
         else if(state==7){
             if(i==in.size()){
@@ -97,18 +118,32 @@ int scan_digit(std::string in){
                 state=10;
             }
         }else if(state==8){
-            return HEX;
+            t="HEX";
+            code=HEX;
+            prop=std::stoi(in.substr(0,i),0,16);
+            // return OCT;
+            // return HEX;
         }else if(state==9){
-            return ILOCT;
+            t="ILOCT";
+            code=ILOCT;
+            // prop=std::stoi(in.substr(0,i),0,16);
+            // return ILOCT;
         }
         else if(state==10){
-            return ILHEX;
+            t="ILHEX";
+            code=ILHEX;
+            // return ILHEX;
         }else if(state==11){
-            return ILDEC;
+            t="ILDEX";
+            code=ILDEC;
+            // return ILDEC;
         }
     }
+    symbolTableNode res=symbolTableNode(t,code,prop);
+    return res;
     // std::string token("");
-    std::cout<<"error4"<<std::endl;
+    // return result;
+    // std::cout<<"error4"<<std::endl;
 }
 
 void scan_letter(){
