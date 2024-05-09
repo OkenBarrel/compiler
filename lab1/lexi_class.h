@@ -5,6 +5,7 @@
 class symbolTableNode{
 public:
     std::string type;
+    int typeCode;
     int prop;
 
     symbolTableNode(std::string t,int c,int p);

@@ -2,7 +2,7 @@
 #include <tuple>
 #include <string>
 #include "lexi_class.h"
-// #include <lexi_anl.h>
+#include "lexi_anl.h"
 enum TOKEN{
     DEC,
     ILEDC,
@@ -79,6 +79,7 @@ symbolTableNode scan_digit(std::string in){
             t="DEC";
             code=DEC;
             prop=std::stoi(in.substr(0,i));
+            break;
             // return DEC;
         }else if(state==4){
             
@@ -105,6 +106,7 @@ symbolTableNode scan_digit(std::string in){
             t="OCT";
             code=OCT;
             prop=std::stoi(in.substr(0,i),0,8);
+            break;
             // return OCT;
         }
         else if(state==7){
@@ -121,25 +123,30 @@ symbolTableNode scan_digit(std::string in){
             t="HEX";
             code=HEX;
             prop=std::stoi(in.substr(0,i),0,16);
+            break;
             // return OCT;
             // return HEX;
         }else if(state==9){
             t="ILOCT";
             code=ILOCT;
+            break;
             // prop=std::stoi(in.substr(0,i),0,16);
             // return ILOCT;
         }
         else if(state==10){
             t="ILHEX";
             code=ILHEX;
+            break;
             // return ILHEX;
         }else if(state==11){
             t="ILDEX";
             code=ILDEC;
+            break;
             // return ILDEC;
         }
     }
     symbolTableNode res=symbolTableNode(t,code,prop);
+    std::cout<<"ending"<<std::endl;
     return res;
     // std::string token("");
     // return result;

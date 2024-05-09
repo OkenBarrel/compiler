@@ -16,7 +16,7 @@ int main(){
         
         type=tellType(in[0]);
         switch(type){
-            // token.clear();
+            // token.erase();
             case IS_DIGIT:
                 res=scan_digit(in);
                 std::cout<<res.toString()<<std::endl;
@@ -27,7 +27,7 @@ int main(){
             default: break;
         }
     
-        std::cout<<in<<std::endl;
+        std::cout<<"in:"<<in<<std::endl;
     }
     
     // hello();
