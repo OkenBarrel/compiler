@@ -1,0 +1,43 @@
+8
+P' P L S E C T F
+
+19
+; = id if then else while do > < + - * / ( ) int8 int10 int16
+
+22
+P' -> P
+P -> L
+P -> L P
+L -> S ;
+S -> id = E
+S -> if C then S
+S -> if C then S else S
+S -> while C do S
+C -> E > E
+C -> E < E
+C -> E = E
+E -> E + T
+E -> E - T
+E -> T
+T -> F
+T -> T * F
+T -> T / F
+F -> ( E )
+F -> id
+F -> int8
+F -> int10
+F -> int16
+
+P'
+
+id = id * id + id ; #
+
+
+E -> T E'
+E' -> + T E'
+E' -> - T E'
+E' -> ε
+T -> F T'
+T' -> * F T'
+T' -> / F T'
+T' -> ε
