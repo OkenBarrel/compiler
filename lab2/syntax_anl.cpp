@@ -2,7 +2,7 @@
 
 
 CFG::CFG(){}
-CFG::~CFG(){}
+// CFG::~CFG(){}
 
 //是终结符
 bool CFG::isVT(string str)

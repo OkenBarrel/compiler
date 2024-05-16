@@ -12,29 +12,32 @@
 using namespace std;
 
 // seta=seta U setb seta未改变返回值为false，否则为true
+struct treeNode{
+    string name;
+    treeNode *left;
+    treeNode *right;
+    treeNode *father;
+    int place;
+    string code;
 
-struct Formula
-{
+};
+
+struct Formula{
     string left;
     vector<string> right;
     Formula() {}
-    Formula(string l, vector<string> r)
-    {
+    Formula(string l, vector<string> r){
         left = l;
         right = r;
     }
-    bool operator<(Formula it) const //重载<,放入map.key
-    {
-        if (left != it.left)
+    bool operator<(Formula it) const{ //重载<,放入map.key{
+        if (left != it.left){
             return (left < it.left);
-        else
-        {
+        }else{
             if (right.size() != it.right.size())
                 return right.size() < it.right.size();
-            else
-            {
-                for (int i = 0; i < right.size(); i++)
-                {
+            else{
+                for (int i = 0; i < right.size(); i++){
                     if (right[i] != it.right[i])
                         return right[i] < it.right[i];
                 }
@@ -42,8 +45,7 @@ struct Formula
         }
         return false;
     }
-    bool operator==(Formula f) const //重载==比较
-    {
+    bool operator==(Formula f) const {//重载==比较
         return (left == f.left && right == f.right);
     }
     string toString(){
@@ -56,8 +58,7 @@ struct Formula
     }
 };
 
-struct item
-{
+struct item{
     Formula formula;    //产生式
     int dot;            //点的位置,-1表示到达最后
     set<string> symbol; //展望串
@@ -110,7 +111,7 @@ protected:
 
 public:
     CFG();
-    ~CFG();
+    // ~CFG();
 
     //是终结符
     bool isVT(string str);
@@ -145,7 +146,7 @@ private:
     vector<Reflect> GOfuction;         // GO映射
 public:
     CFG_LR1(string path);
-    ~CFG_LR1();
+    // ~CFG_LR1();
     map<int, set<item>> getItemset();
     vector<Reflect> getGOfuction();
     //计算First集合

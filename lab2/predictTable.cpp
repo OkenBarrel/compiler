@@ -161,7 +161,7 @@ PredictTable_LR::PredictTable_LR(CFG_LR1 lr1)
     }
 }
 
-PredictTable_LR::~PredictTable_LR() {}
+// PredictTable_LR::~PredictTable_LR() {}
 
 unordered_set<string> PredictTable_LR::getActionHeader()
 {
@@ -180,8 +180,7 @@ bool PredictTable_LR::analyse(string path)
     ifstream infile;
     infile.open(path);
     if(infile.is_open()) cout<<"yes"<<endl;
-    do
-    {
+    do{
         infile >> str;
         cout<<str<<endl;
         l.push_back(str);
@@ -189,8 +188,7 @@ bool PredictTable_LR::analyse(string path)
     l.push_back("#");
     infile.close();
     cout << endl;
-    for (auto i : l)
-    {
+    for (auto i : l){
         cout << i;
     }
     cout << "   procedure:" << endl;
@@ -204,8 +202,7 @@ bool PredictTable_LR::analyse(string path)
     // cout << "------------+--------+----+";
     // cout << "-------------------------------------+-----------" << endl;
 
-    for (int i = 0; i < l.size(); i++)
-    {
+    for (int i = 0; i < l.size(); i++){
         string s = l[i];
         int top = st_state.top();
         action a = table[top][s];
@@ -227,8 +224,7 @@ bool PredictTable_LR::analyse(string path)
         cout<<endl;
         // cout<<str_top<<"            ";
         cout << s << "      ";
-        if (a.state == ERROR)
-        {   
+        if (a.state == ERROR){   
             // x=table[top]["~"].num;
             a=table[top]["~"];
             str_top="~";
@@ -239,37 +235,31 @@ bool PredictTable_LR::analyse(string path)
             // cout << "doing~"<<a.state <<" "<<table[top]["~"].num<< endl;
             // return false;
         }
-        if (a.state == ERROR)
-        {
+        if (a.state == ERROR){
             cout << "error1, stopped" << endl;
             return false;
         }
-        else if (a.state == STATE)
-        {
+        else if (a.state == STATE){
             cout << 's' << left << setw(2) << a.num << " ";
             st_str.push(s);
             st_state.push(a.num);
             if(s=="~") i--;
             cout << "push  " << left << setw(2) << a.num << ' ' << s << endl;
             continue;
-        }
-        else if (a.state == REVERSE)
+        }else if (a.state == REVERSE)
         {
             cout << 'r' << left << setw(2) << a.num << " ";
             Formula f = getProduction()[a.num];
             cout << "pop  " << left << setw(2) << f.right.size() << "tokens and states";
-                for (int k = 0; k < f.right.size(); k++)
-            {
+                for (int k = 0; k < f.right.size(); k++){
                 // cout<<"str_tpo "<<str_top<<endl;
                     st_str.pop();
                 
                 st_state.pop();
-            }
-            top = st_state.top();
+            }top = st_state.top();
             cout << " push:";
             int x = table[top][f.left].num;
-            if (x == -1)
-            {   
+            if (x == -1){   
                 // x=table[top]["~"].num
                 cout << "error2, stopped" << endl;
                 return false;
@@ -279,15 +269,13 @@ bool PredictTable_LR::analyse(string path)
             st_str.push(f.left);
             cout << f.left << "       ";
             cout << f.left << " ->";
-            for (auto i : f.right)
-            {
+            for (auto i : f.right){
                 cout << ' ' << i;
             }
             i--;
             cout << endl;
         }
-        else if (a.state == ACCEPT)
-        {
+        else if (a.state == ACCEPT){
             cout << "acc"
                  << " ";
             cout << "successfully accept!" << endl;
@@ -307,16 +295,14 @@ ostream &operator<<(ostream &os, PredictTable_LR &lrtable)
     os << "  Action:" << endl;
     os << "      ";
 
-    for (auto vt : lrtable.actionHeader)
-    {
+    for (auto vt : lrtable.actionHeader){
         os.setf(ios::left);
         os.width(6);
         os << vt;
     }
     os << endl;
 
-    for (int i = 0; i < lrtable.table.size(); i++)
-    {
+    for (int i = 0; i < lrtable.table.size(); i++){
         os.setf(ios::left);
         os.width(5);
         os << i << ':';
