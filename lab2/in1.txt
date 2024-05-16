@@ -41,3 +41,11 @@ T -> F T'
 T' -> * F T'
 T' -> / F T'
 T' -> ε
+
+while ( id + int10 ) > int16 do
+    if id = int8 then 
+        while id < id do
+            id = id * id / id ;
+id = id * id + id ;
+
+while ( id + int10 ) > int16 do if id = int8 then while id < id do id = id * id / id ; id = id * id + id ;

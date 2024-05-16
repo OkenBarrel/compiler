@@ -80,12 +80,8 @@ struct item
     }
     bool operator==(item it) const //重载==比较
     {
-        return (formula == it.formula && dot == it.dot&& symbol == it.symbol);//&& symbol == it.symbol
+        return (formula == it.formula && dot == it.dot&& symbol == it.symbol);
     }
-    // bool operator=(item it) const //重载===比较
-    // {
-    //     return (formula == it.formula && dot == it.dot);
-    // }
 };
 
 enum ActionState{
@@ -148,7 +144,7 @@ private:
     map<int, set<item>> itemset;       //项目集
     vector<Reflect> GOfuction;         // GO映射
 public:
-    CFG_LR1();
+    CFG_LR1(string path);
     ~CFG_LR1();
     map<int, set<item>> getItemset();
     vector<Reflect> getGOfuction();
@@ -196,5 +192,5 @@ public:
     //重载<<输出分析表
     friend ostream &operator<<(ostream &os, PredictTable_LR &lrtable);
     //分析串
-    bool analyse();
+    bool analyse(string path);
 };

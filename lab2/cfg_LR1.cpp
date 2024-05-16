@@ -1,4 +1,6 @@
 #include "syntax_anl.h"
+#include <fstream>
+
 bool inVec(vector<string> vec, string e){
     for(string i:vec){
         if(e==i) return true;
@@ -41,7 +43,58 @@ bool insertSet(set<string> &seta, set<string> setb)
     return seta.size() != asize;
 }
 
-CFG_LR1::CFG_LR1(){}
+CFG_LR1::CFG_LR1(string path){
+    cout<<"into con"<<endl;
+    int num;
+    ifstream infile;
+    infile.open(path);
+    infile >> num;
+    for (int i = 0; i < num; i++)
+    {
+
+        string s;
+        infile >> s;
+        VN.insert(s);
+    }
+    infile>> num;
+    for (int i = 0; i < num; i++)
+    {
+        string s;
+        infile >> s;
+        VT.insert(s);
+    }
+    infile >> num;
+    string space;
+    getline(infile,space);
+    for (int i = 0; i < num; i++)
+    {
+        string str;
+        string s;
+        char ch;
+        vector<string> vct;
+        infile >> s;
+        infile >> str;
+
+        while (true)
+        {
+            ch = infile.get();
+            if (ch != ' ')
+                break;
+            infile >> str;
+            if(str=="~"){
+                cout<<str<<endl;
+            }
+            vct.push_back(str);
+        }
+        Formula f(s, vct);
+        production[i] = f;
+    }
+    string s;
+    infile >> s;
+    setStartSymbol(s);
+    infile.close();
+    // return infile;
+}
 
 CFG_LR1::~CFG_LR1(){}
 

@@ -1,4 +1,5 @@
 #include "syntax_anl.h"
+#include <fstream>
 
 PredictTable::PredictTable(){};
 PredictTable::~PredictTable(){};
@@ -172,15 +173,21 @@ unordered_set<string> PredictTable_LR::getGotoHeader()
     return gotoheader;
 }
 
-bool PredictTable_LR::analyse()
+bool PredictTable_LR::analyse(string path)
 {
     vector<string> l;
     string str;
+    ifstream infile;
+    infile.open(path);
+    if(infile.is_open()) cout<<"yes"<<endl;
     do
     {
-        cin >> str;
+        infile >> str;
+        cout<<str<<endl;
         l.push_back(str);
-    } while (str != "#");
+    } while (!infile.eof());
+    l.push_back("#");
+    infile.close();
     cout << endl;
     for (auto i : l)
     {
@@ -194,8 +201,8 @@ bool PredictTable_LR::analyse()
     cout << "[parsing]" << endl;
     cout << "top         input  loopup    action";
     cout << "                                    what" << endl;
-    cout << "------------+--------+----+";
-    cout << "-------------------------------------+-----------" << endl;
+    // cout << "------------+--------+----+";
+    // cout << "-------------------------------------+-----------" << endl;
 
     for (int i = 0; i < l.size(); i++)
     {
