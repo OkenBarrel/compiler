@@ -96,7 +96,7 @@ CFG_LR1::CFG_LR1(string path){
     // return infile;
 }
 
-CFG_LR1::~CFG_LR1(){}
+// CFG_LR1::~CFG_LR1(){}
 
 map<string,set<string>> CFG_LR1::getFollow(){
     return followSet;

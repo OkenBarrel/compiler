@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
 #include <set>
 #include <unordered_set>
 #include <map>
@@ -14,13 +15,54 @@ using namespace std;
 // seta=seta U setb seta未改变返回值为false，否则为true
 struct treeNode{
     string name;
-    treeNode *left;
-    treeNode *right;
+    vector<treeNode*> children;
     treeNode *father;
     int place;
     string code;
-
+    treeNode(){}
+    treeNode(string n){
+        name=n;
+        father=nullptr;
+        place=-1;
+        code="";
+        // father=dad;
+    }
+    bool setfather(treeNode* f){
+        if(f==NULL) return false;
+        f->children.insert(f->children.begin(),this);
+        father=f;
+        // if(res.second){
+        //     father=f;
+        //     return true;
+        // }
+        return false;
+    }
 };
+
+// void printTree(treeNode *root){
+//     if(root==nullptr){
+//         cout<<"root is empty"<<endl;
+//         return;
+//     }
+//     std::deque<treeNode*> currentLevel;
+//     std::deque<treeNode*> nextLevel;
+//     treeNode *fa;
+//     currentLevel.push_back(root);
+
+//     while (!currentLevel.empty()) {
+//         fa=currentLevel.front()->father;
+//         for (treeNode* node : currentLevel) {
+//             if(fa!=node->father) cout<<"| father: "<<fa->name<<" ";
+//             std::cout << node->name << " ";
+//             for (treeNode* child : node->children) {
+//                 nextLevel.push_back(child);
+//             }
+//         }
+//         std::cout << std::endl;
+//         currentLevel.swap(nextLevel);
+//         nextLevel.clear();
+//     }
+// }
 
 struct Formula{
     string left;

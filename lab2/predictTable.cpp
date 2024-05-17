@@ -1,6 +1,38 @@
 #include "syntax_anl.h"
 #include <fstream>
 
+void printTree(treeNode *root){
+    if(root==nullptr){
+        cout<<"root is empty"<<endl;
+        return;
+    }
+    std::deque<treeNode*> currentLevel;
+    std::deque<treeNode*> nextLevel;
+    treeNode *fa;
+    // currentLevel.push_back(root);
+    fa=root;
+    cout<<root->name<<endl;
+    for(treeNode *it:root->children){
+        currentLevel.push_back(it);
+    }
+    while (!currentLevel.empty()) {
+        // fa=currentLevel.front()->father;
+        for (treeNode* node : currentLevel) {
+            if(fa!=node->father) {
+                fa=node->father;
+                cout<<"| father: "<<fa->name<<" ";
+            }
+            std::cout << node->name << " ";
+            for (treeNode* child : node->children) {
+                nextLevel.push_back(child);
+            }
+        }
+        std::cout << std::endl;
+        currentLevel.swap(nextLevel);
+        nextLevel.clear();
+    }
+}
+
 PredictTable::PredictTable(){};
 PredictTable::~PredictTable(){};
 map<int, Formula> PredictTable::getProduction()
@@ -22,6 +54,7 @@ int PredictTable::getFormulaNum(Formula f)
 }
 
 PredictTable_LR::PredictTable_LR() {}
+PredictTable_LR::~PredictTable_LR(){}
 
 PredictTable_LR::PredictTable_LR(CFG_LR1 lr1)
 {
@@ -173,9 +206,9 @@ unordered_set<string> PredictTable_LR::getGotoHeader()
     return gotoheader;
 }
 
-bool PredictTable_LR::analyse(string path)
-{
+bool PredictTable_LR::analyse(string path){
     vector<string> l;
+    vector<treeNode*> ll;
     string str;
     ifstream infile;
     infile.open(path);
@@ -184,16 +217,30 @@ bool PredictTable_LR::analyse(string path)
         infile >> str;
         cout<<str<<endl;
         l.push_back(str);
+
+        treeNode* temp=new treeNode(str);
+        ll.push_back(temp);
+
     } while (!infile.eof());
     l.push_back("#");
+
+    treeNode* temp=new treeNode("#");
+    ll.push_back(temp);
+
     infile.close();
     cout << endl;
+
     for (auto i : l){
         cout << i;
     }
     cout << "   procedure:" << endl;
     stack<int> st_state;
     stack<string> st_str;
+
+    stack<treeNode*> st_tree;
+
+    st_tree.push(temp);
+
     st_str.push("#");
     st_state.push(0);
     cout << "[parsing]" << endl;
@@ -225,7 +272,6 @@ bool PredictTable_LR::analyse(string path)
         // cout<<str_top<<"            ";
         cout << s << "      ";
         if (a.state == ERROR){   
-            // x=table[top]["~"].num;
             a=table[top]["~"];
             str_top="~";
             s="~";
@@ -242,6 +288,8 @@ bool PredictTable_LR::analyse(string path)
         else if (a.state == STATE){
             cout << 's' << left << setw(2) << a.num << " ";
             st_str.push(s);
+            treeNode * tt=new treeNode(s);
+            st_tree.push(tt);
             st_state.push(a.num);
             if(s=="~") i--;
             cout << "push  " << left << setw(2) << a.num << ' ' << s << endl;
@@ -250,13 +298,24 @@ bool PredictTable_LR::analyse(string path)
         {
             cout << 'r' << left << setw(2) << a.num << " ";
             Formula f = getProduction()[a.num];
+
+            treeNode* dad=new treeNode(f.left);
+
+
             cout << "pop  " << left << setw(2) << f.right.size() << "tokens and states";
-                for (int k = 0; k < f.right.size(); k++){
+            for (int k = 0; k < f.right.size(); k++){
                 // cout<<"str_tpo "<<str_top<<endl;
-                    st_str.pop();
+                st_str.pop();
+
+                treeNode* kid=st_tree.top();
+                kid->setfather(dad);
+
+                st_tree.pop();
                 
                 st_state.pop();
-            }top = st_state.top();
+            }
+            // reverse(dad->children.begin(),dad->children.end());
+            top = st_state.top();
             cout << " push:";
             int x = table[top][f.left].num;
             if (x == -1){   
@@ -267,6 +326,9 @@ bool PredictTable_LR::analyse(string path)
             st_state.push(x);
             cout << left << setw(2) << x << ' ';
             st_str.push(f.left);
+
+            st_tree.push(dad);
+
             cout << f.left << "       ";
             cout << f.left << " ->";
             for (auto i : f.right){
@@ -279,6 +341,14 @@ bool PredictTable_LR::analyse(string path)
             cout << "acc"
                  << " ";
             cout << "successfully accept!" << endl;
+
+            for(int ii=0;ii<st_tree.size();ii++){
+                treeNode *t=st_tree.top();
+                printTree(t);
+                st_tree.pop();
+                cout<<"next"<<endl;
+            }
+            
             // cout << "------------+--------+----+";
             // cout << "-------------------------------------+-----------" << endl;
             // cout << " end!" << endl;
