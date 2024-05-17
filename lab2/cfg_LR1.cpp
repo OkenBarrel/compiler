@@ -86,7 +86,7 @@ CFG_LR1::CFG_LR1(string path){
             }
             vct.push_back(str);
         }
-        Formula f(s, vct);
+        Production f(s, vct);
         production[i] = f;
     }
     string s;
@@ -102,7 +102,7 @@ map<string,set<string>> CFG_LR1::getFollow(){
     return followSet;
 }
 
-vector<Reflect> CFG_LR1::getGOfuction(){
+vector<Goto> CFG_LR1::getGOfuction(){
     return GOfuction;
 }
 
@@ -331,10 +331,10 @@ void CFG_LR1::createItem()
 
                 if (it.dot != -1) //未到末尾
                 {
-                    if (it.formula.right[it.dot] == v) //下一个读入的符号是v
+                    if (it.pro.right[it.dot] == v) //下一个读入的符号是v
                     {
-                        item i(it.formula, it.dot + 1);
-                        if (i.dot >= i.formula.right.size())
+                        item i(it.pro, it.dot + 1);
+                        if (i.dot >= i.pro.right.size())
                             i.dot = -1;
                         i.symbol = it.symbol;
                         st.insert(i);
@@ -355,7 +355,7 @@ void CFG_LR1::createItem()
                 if (flag == -1)
                 {
                     itemset[index] = st;
-                    Reflect r;
+                    Goto r;
                     r.first = num;//状态数
                     r.sign = v;
                     r.next = index;
@@ -365,7 +365,7 @@ void CFG_LR1::createItem()
                 }
                 else
                 {
-                    Reflect r;
+                    Goto r;
                     r.first = num;
                     r.sign = v;
                     r.next = flag;
@@ -389,14 +389,14 @@ void CFG_LR1::outPutItem()
         for (auto it1 : it0.second)
         {
             cout << "    ";
-            cout << it1.formula.left << ' ' << "->";
-            for (int i = 0; i < it1.formula.right.size(); i++)
+            cout << it1.pro.left << ' ' << "->";
+            for (int i = 0; i < it1.pro.right.size(); i++)
             {
                 if (i == it1.dot)
                 {
                     cout << " .";
                 }
-                cout << ' ' << it1.formula.right[i];
+                cout << ' ' << it1.pro.right[i];
             }
             if (it1.dot == -1)
                 cout << " .";
@@ -425,7 +425,7 @@ void CFG_LR1::Closure(set<item> &ist)
         // while(cnt<s){
         //     item ii=que.front();
         //     que.pop();
-        //     cout<<ii.formula.toString()<<" "<<ii.dot<<endl;
+        //     cout<<ii.pro.toString()<<" "<<ii.dot<<endl;
         //     que.push(ii);
         //     cnt++;
         // }
@@ -433,20 +433,20 @@ void CFG_LR1::Closure(set<item> &ist)
         if (it.dot != -1)
         {
             // dot后面是非终结符
-            string str = it.formula.right[it.dot];
+            string str = it.pro.right[it.dot];
             if (isVN(str))
             {
                 for (auto pr : getProduction()){
                     if (pr.second.left == str){
                         item i(pr.second, 0);
                         //如果待归约符号后面为空
-                        if (it.dot == it.formula.right.size() - 1)
+                        if (it.dot == it.pro.right.size() - 1)
                         {
                             i.symbol = it.symbol;
                         }
                         else //如果待归约符号后面不为空
                         {
-                            string next = it.formula.right[it.dot + 1];
+                            string next = it.pro.right[it.dot + 1];
                             if (isVN(next))
                             {
                                 if (firstSet[next].find("~") == firstSet[next].end())

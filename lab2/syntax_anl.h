@@ -13,21 +13,21 @@
 using namespace std;
 
 // seta=seta U setb seta未改变返回值为false，否则为true
-struct treeNode{
+struct TreeNode{
     string name;
-    vector<treeNode*> children;
-    treeNode *father;
+    vector<TreeNode*> children;
+    TreeNode *father;
     int place;
     string code;
-    treeNode(){}
-    treeNode(string n){
+    TreeNode(){}
+    TreeNode(string n){
         name=n;
         father=nullptr;
         place=-1;
         code="";
         // father=dad;
     }
-    bool setfather(treeNode* f){
+    bool setfather(TreeNode* f){
         if(f==NULL) return false;
         f->children.insert(f->children.begin(),this);
         father=f;
@@ -64,15 +64,15 @@ struct treeNode{
 //     }
 // }
 
-struct Formula{
+struct Production{
     string left;
     vector<string> right;
-    Formula() {}
-    Formula(string l, vector<string> r){
+    Production() {}
+    Production(string l, vector<string> r){
         left = l;
         right = r;
     }
-    bool operator<(Formula it) const{ //重载<,放入map.key{
+    bool operator<(Production it) const{ //重载<,放入map.key{
         if (left != it.left){
             return (left < it.left);
         }else{
@@ -87,7 +87,7 @@ struct Formula{
         }
         return false;
     }
-    bool operator==(Formula f) const {//重载==比较
+    bool operator==(Production f) const {//重载==比较
         return (left == f.left && right == f.right);
     }
     string toString(){
@@ -101,13 +101,13 @@ struct Formula{
 };
 
 struct item{
-    Formula formula;    //产生式
+    Production pro;    //产生式
     int dot;            //点的位置,-1表示到达最后
     set<string> symbol; //展望串
     item() {}
-    item(Formula f, int d)
+    item(Production f, int d)
     {
-        formula = f;
+        pro = f;
         dot = d;
     }
 
@@ -119,11 +119,11 @@ struct item{
         }
         if (dot != it.dot)
             return dot < it.dot;
-        return formula < it.formula;
+        return pro < it.pro;
     }
     bool operator==(item it) const //重载==比较
     {
-        return (formula == it.formula && dot == it.dot&& symbol == it.symbol);
+        return (pro == it.pro && dot == it.dot&& symbol == it.symbol);
     }
 };
 
@@ -134,8 +134,7 @@ enum ActionState{
     ERROR,
 };
 
-struct Reflect
-{
+struct Goto{
     int first;
     string sign;
     int next;
@@ -149,7 +148,7 @@ protected:
     unordered_set<string> VT;     //终结符集
     unordered_set<string> VN;     //非终结符集
     string startSymbol;           //开始符号
-    map<int, Formula> production; //产生式集
+    map<int, Production> production; //产生式集
 
 public:
     CFG();
@@ -170,27 +169,26 @@ public:
     
     unordered_set<string> getVN();
     void setVN(unordered_set<string> vn);
-    map<int, Formula> getProduction();
-    void setProduction(map<int, Formula> pr);
+    map<int, Production> getProduction();
+    void setProduction(map<int, Production> pr);
     //重载>>
     friend istream &operator>>(istream &in, CFG &cfg);
     //重载<<
     friend ostream &operator<<(ostream &os, CFG &cfg);
 };
 
-class CFG_LR1 : public CFG
-{
+class CFG_LR1 : public CFG{
 private:
     map<string, set<string>> followSet;
     unordered_set<string> emptySet;
     map<string, set<string>> firstSet; // first集
     map<int, set<item>> itemset;       //项目集
-    vector<Reflect> GOfuction;         // GO映射
+    vector<Goto> GOfuction;         // GO映射
 public:
     CFG_LR1(string path);
     // ~CFG_LR1();
     map<int, set<item>> getItemset();
-    vector<Reflect> getGOfuction();
+    vector<Goto> getGOfuction();
     //计算First集合
     void makeFirst();
     void makeFollow();
@@ -205,20 +203,18 @@ public:
     void Closure(set<item> &ist);
 };
 
-class PredictTable
-{
+class PredictTable{
 private:
-    map<int, Formula> production; //产生式集
+    map<int, Production> production; //产生式集
 public:
     PredictTable();
     ~PredictTable();
-    map<int, Formula> getProduction();
-    void setProduction(map<int, Formula> pr);
-    int getFormulaNum(Formula f);
+    map<int, Production> getProduction();
+    void setProduction(map<int, Production> pr);
+    int getFormulaNum(Production f);
 };
 
-class PredictTable_LR : public PredictTable
-{
+class PredictTable_LR : public PredictTable{
 private:
     unordered_set<string> actionHeader; // action表头
     unordered_set<string> gotoheader;   // goto表头
@@ -231,7 +227,7 @@ public:
     unordered_set<string> getActionHeader();
     unordered_set<string> getGotoHeader();
     //分析程序
-    bool analyse(vector<string> l);
+    // bool analyse(vector<string> l);
     //重载<<输出分析表
     friend ostream &operator<<(ostream &os, PredictTable_LR &lrtable);
     //分析串

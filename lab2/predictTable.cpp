@@ -1,29 +1,29 @@
 #include "syntax_anl.h"
 #include <fstream>
 
-void printTree(treeNode *root){
+void printTree(TreeNode *root){
     if(root==nullptr){
         cout<<"root is empty"<<endl;
         return;
     }
-    std::deque<treeNode*> currentLevel;
-    std::deque<treeNode*> nextLevel;
-    treeNode *fa;
+    std::deque<TreeNode*> currentLevel;
+    std::deque<TreeNode*> nextLevel;
+    TreeNode *fa;
     // currentLevel.push_back(root);
     fa=root;
     cout<<root->name<<endl;
-    for(treeNode *it:root->children){
+    for(TreeNode *it:root->children){
         currentLevel.push_back(it);
     }
     while (!currentLevel.empty()) {
         // fa=currentLevel.front()->father;
-        for (treeNode* node : currentLevel) {
+        for (TreeNode* node : currentLevel) {
             if(fa!=node->father) {
                 fa=node->father;
-                cout<<"| father: "<<fa->name<<" ";
+                cout<<"| father "<<fa->name<<": ";
             }
             std::cout << node->name << " ";
-            for (treeNode* child : node->children) {
+            for (TreeNode* child : node->children) {
                 nextLevel.push_back(child);
             }
         }
@@ -35,15 +35,15 @@ void printTree(treeNode *root){
 
 PredictTable::PredictTable(){};
 PredictTable::~PredictTable(){};
-map<int, Formula> PredictTable::getProduction()
+map<int, Production> PredictTable::getProduction()
 {
     return production;
 }
-void PredictTable::setProduction(map<int, Formula> pr)
+void PredictTable::setProduction(map<int, Production> pr)
 {
     production = pr;
 }
-int PredictTable::getFormulaNum(Formula f)
+int PredictTable::getFormulaNum(Production f)
 {
     for (auto pr : production)
     {
@@ -94,7 +94,7 @@ PredictTable_LR::PredictTable_LR(CFG_LR1 lr1)
     {
         for (auto it0 : it.second)
         {
-            if (it0.dot == -1 && it0.formula.left == lr1.getStartSymbol())
+            if (it0.dot == -1 && it0.pro.left == lr1.getStartSymbol())
             {
                 action i;
                 i.state = ACCEPT;
@@ -129,14 +129,14 @@ PredictTable_LR::PredictTable_LR(CFG_LR1 lr1)
     {
         for (auto it : its.second)
         {
-            if (it.dot == -1 && it.formula.left != lr1.getStartSymbol())
+            if (it.dot == -1 && it.pro.left != lr1.getStartSymbol())
             {
                 action a;
                 a.state = REVERSE;
-                a.num = getFormulaNum(it.formula);
+                a.num = getFormulaNum(it.pro);
                 map<string,set<string>> fo=lr1.getFollow();
-                set<string> ss=fo[it.formula.left];
-            //     if(lr1.isVN(*it.formula.right.rbegin())){
+                set<string> ss=fo[it.pro.left];
+            //     if(lr1.isVN(*it.pro.right.rbegin())){
             //         for(auto i:ss){
             //             cout<<"creating action "<<its.first<<" "<<i<<endl;
             //             if (table[its.first][i].state != ERROR){
@@ -158,7 +158,7 @@ PredictTable_LR::PredictTable_LR(CFG_LR1 lr1)
             //             table[its.first][str] = a;
             //         }
                 // }
-                // if(lr1.isVT(*it.formula.right.rbegin())){
+                // if(lr1.isVT(*it.pro.right.rbegin())){
                 //     unordered_set<string> vt=lr1.getVT();
                 //     vt.insert("#");
                 //     for(string str:vt){
@@ -208,7 +208,7 @@ unordered_set<string> PredictTable_LR::getGotoHeader()
 
 bool PredictTable_LR::analyse(string path){
     vector<string> l;
-    vector<treeNode*> ll;
+    vector<TreeNode*> ll;
     string str;
     ifstream infile;
     infile.open(path);
@@ -218,13 +218,13 @@ bool PredictTable_LR::analyse(string path){
         cout<<str<<endl;
         l.push_back(str);
 
-        treeNode* temp=new treeNode(str);
+        TreeNode* temp=new TreeNode(str);
         ll.push_back(temp);
 
     } while (!infile.eof());
     l.push_back("#");
 
-    treeNode* temp=new treeNode("#");
+    TreeNode* temp=new TreeNode("#");
     ll.push_back(temp);
 
     infile.close();
@@ -237,7 +237,7 @@ bool PredictTable_LR::analyse(string path){
     stack<int> st_state;
     stack<string> st_str;
 
-    stack<treeNode*> st_tree;
+    stack<TreeNode*> st_tree;
 
     st_tree.push(temp);
 
@@ -288,7 +288,7 @@ bool PredictTable_LR::analyse(string path){
         else if (a.state == STATE){
             cout << 's' << left << setw(2) << a.num << " ";
             st_str.push(s);
-            treeNode * tt=new treeNode(s);
+            TreeNode * tt=new TreeNode(s);
             st_tree.push(tt);
             st_state.push(a.num);
             if(s=="~") i--;
@@ -297,9 +297,9 @@ bool PredictTable_LR::analyse(string path){
         }else if (a.state == REVERSE)
         {
             cout << 'r' << left << setw(2) << a.num << " ";
-            Formula f = getProduction()[a.num];
+            Production f = getProduction()[a.num];
 
-            treeNode* dad=new treeNode(f.left);
+            TreeNode* dad=new TreeNode(f.left);
 
 
             cout << "pop  " << left << setw(2) << f.right.size() << "tokens and states";
@@ -307,7 +307,7 @@ bool PredictTable_LR::analyse(string path){
                 // cout<<"str_tpo "<<str_top<<endl;
                 st_str.pop();
 
-                treeNode* kid=st_tree.top();
+                TreeNode* kid=st_tree.top();
                 kid->setfather(dad);
 
                 st_tree.pop();
@@ -343,7 +343,7 @@ bool PredictTable_LR::analyse(string path){
             cout << "successfully accept!" << endl;
 
             for(int ii=0;ii<st_tree.size();ii++){
-                treeNode *t=st_tree.top();
+                TreeNode *t=st_tree.top();
                 printTree(t);
                 st_tree.pop();
                 cout<<"next"<<endl;

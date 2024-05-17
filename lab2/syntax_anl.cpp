@@ -40,11 +40,11 @@ void CFG::setVN(unordered_set<string> vn)
 {
     VN = vn;
 }
-map<int, Formula> CFG::getProduction()
+map<int, Production> CFG::getProduction()
 {
     return production;
 }
-void CFG::setProduction(map<int, Formula> pr)
+void CFG::setProduction(map<int, Production> pr)
 {
     production = pr;
 }
@@ -90,7 +90,7 @@ istream &operator >>(istream &in, CFG &cfg)
             }
             vct.push_back(str);
         }
-        Formula f(s, vct);
+        Production f(s, vct);
         cfg.production[i] = f;
     }
     string s;
