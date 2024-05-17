@@ -2,30 +2,10 @@
 #include <string>
 #include "lexi_class.h"
 
-// class symbolTableNode{
-// public:
-//     std::string type;
-//     int typeCode;
-//     int prop;
-
-//     symbolTableNode(std::string t,int c,int p):type(t),typeCode(c),prop(p){}
-//     symbolTableNode(){
-//         type="noen";
-//         typeCode=-1;
-//         prop=-1;
-//     }
-//     void setType(std::string t,int c){
-//         type=t;
-//         typeCode=c;
-//     }
-//     void setProp(int p){
-//         prop=p;
-//     }
-//     std::string toString(){
-//         return "type:"+type+" prop"+std::to_string(prop);
-//     }
-// };
 symbolTableNode::symbolTableNode(std::string t,int c,int p):type(t),typeCode(c),prop(p){}
+
+symbolTableNode::symbolTableNode(std::string t,int c,std::string p):type(t),typeCode(c),props(p){}
+
 symbolTableNode::symbolTableNode(){
     type="noen";
     typeCode=-1;
@@ -38,6 +18,12 @@ void symbolTableNode::setType(std::string t,int c){
 void symbolTableNode::setProp(int p){
     prop=p;
 }
+void symbolTableNode::setProp(std::string p){
+    props=p;
+}
 std::string symbolTableNode::toString(){
-    return "type:"+type+" prop:"+std::to_string(prop);
+    if(typeCode>5){
+        return type+" "+props;
+    }
+    return type+" "+std::to_string(prop);
 }
