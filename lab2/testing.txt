@@ -1,5 +1,5 @@
-while ( id + int10 ) > int16 do
+while ( id + int10 ) >= int16 do
     if id = int8 then 
-        while id < id do
+        while id <> id do
             id = id * id / id ;
 id = id * id + id ;

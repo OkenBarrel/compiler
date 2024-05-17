@@ -1,0 +1,5 @@
+IDN a
+DEC 3
+EQ =
+DEC 4
+ADD +

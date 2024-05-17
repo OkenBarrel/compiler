@@ -1,10 +1,10 @@
 10
 P' P L S E E' C T T' F
 
-20
-; = id if then else while do > < + - * / ( ) int8 int10 int16 ~
+23
+; = id if then else while do > < + - * / ( ) int8 int10 int16 ~ >= <= <>
 
-24
+27
 P' -> P
 P -> L
 P -> L P
@@ -14,7 +14,10 @@ S -> if C then S
 S -> if C then S else S
 S -> while C do S
 C -> E > E
+C -> E >= E
 C -> E < E
+C -> E <= E
+C -> E <> E
 C -> E = E
 E -> T E'
 E' -> + T E'
