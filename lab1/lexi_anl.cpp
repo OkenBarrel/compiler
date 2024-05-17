@@ -163,41 +163,41 @@ symbolTableNode scan_letter(std::string in){
     switch(in.length()){
         case 2:
             if(in=="if"){
-                prop="if";
-                t="FUNC";
+                prop="";
+                t="if";
                 code=FUNC;
             }else if(in=="do"){
-                prop="do";
-                t="FUNC";
+                prop="";
+                t="do";
                 code=FUNC;
             }
             break;
         case 3:
             if(in=="end"){
-                prop="end";
-                t="FUNC";
+                prop="";
+                t="end";
                 code=FUNC;
             }
             break;
         case 4:
             if(in=="then"){
-                prop="then";
-                t="FUNC";
+                prop="";
+                t="then";
                 code=FUNC;
             }else if(in=="else"){
-                prop="else";
-                t="FUNC";
+                prop="";
+                t="else";
                 code=FUNC;
             }
             break;
         case 5:
             if(in=="while"){
-                prop="while";
-                t="FUNC";
+                prop="";
+                t="while";
                 code=FUNC;
             }else if(in=="begin"){
-                prop="begin";
-                t="FUNC";
+                prop="";
+                t="while";
                 code=FUNC;
             }
             break;
@@ -283,7 +283,7 @@ symbolTableNode scan_else(std::string in,int* error){
 std::queue<std::string> sep_words(std::string in){
     int type=tellType(in[0]);
     int i=0;
-    bool Hex = false;
+    bool FLAG = false;
     std::string t;
     std::queue <std::string> tmpQ;
 
@@ -296,14 +296,20 @@ std::queue<std::string> sep_words(std::string in){
             t.push_back(in[i]);
             break;
         }
-        if(curtype==type){
+        if(curtype==type && type!= IS_SYMBOL ){
             t.push_back(in[i]);
-
         }else{
             if(in[i-1]=='0'&&(in[i]=='x'||in[i]=='X')){
-                Hex=true;
+                FLAG=true;
             }
-            if(Hex==false){
+            if(tellType(in[i-1])==IS_LETTER && (tellType(in[i])==IS_DIGIT)){
+                FLAG=true;
+            }
+            if((tellType(in[i-1])==IS_LETTER || tellType(in[i-1])==IS_DIGIT) && (tellType(in[i])==IS_SYMBOL)){
+                FLAG=false;
+            }
+
+            if(FLAG==false){
                 type=curtype;
                 tmpQ.push(t);
                 t.clear();
@@ -316,7 +322,7 @@ std::queue<std::string> sep_words(std::string in){
         i++;
 
     }
-    Hex=false;
+    FLAG=false;
     tmpQ.push(t);
     
 
