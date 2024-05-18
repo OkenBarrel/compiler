@@ -1,6 +1,17 @@
 #include "syntax_anl.h"
 #include <fstream>
 
+// void doThis(int proId,){
+//     switch (proId)
+//     {
+//     case 1:
+        
+//         break;
+    
+//     default:
+//         break;
+//     }
+// }
 void errorMsg(int e){
     cout<<"error: ";
     switch (e)
@@ -48,7 +59,7 @@ void printTree(TreeNode *root){
     TreeNode *fa;
     // currentLevel.push_back(root);
     fa=root;
-    cout<<root->name<<endl;
+    cout<<root->syntaxType<<endl;
     for(TreeNode *it:root->children){
         currentLevel.push_back(it);
     }
@@ -57,9 +68,9 @@ void printTree(TreeNode *root){
         for (TreeNode* node : currentLevel) {
             if(fa!=node->father) {
                 fa=node->father;
-                cout<<"| father "<<fa->name<<": ";
+                cout<<"| father "<<fa->syntaxType<<": ";
             }
-            std::cout << node->name << " ";
+            std::cout << node->syntaxType << " ";
             for (TreeNode* child : node->children) {
                 nextLevel.push_back(child);
             }
@@ -399,6 +410,9 @@ bool PredictTable_LR::analyse(string path){
             cout << 'r' << left << setw(2) << a.num << " ";
             Production f = getProduction()[a.num];
 
+            int proId;
+            // vector<TreeNode*> kids;
+
             TreeNode* dad=new TreeNode(f.left);
 
 
@@ -409,10 +423,29 @@ bool PredictTable_LR::analyse(string path){
 
                 TreeNode* kid=st_tree.top();
                 kid->setfather(dad);
+                // kids.insert(kids.begin(),kid);
 
                 st_tree.pop();
                 
                 st_state.pop();
+            }
+            string gen;
+            switch (proId){
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                    for(TreeNode* tn:dad->children){
+                        if(tn->code=="") continue;
+                        dad->code.append("\n");
+                        dad->code.append(tn->code);
+                    }
+                    if(proId!=4) break;
+                    gen=to_string((dad->children)[0]->place)+":="+to_string((dad->children)[0]->place);
+                    dad->code.append(gen);
+                
+                default:
+                    break;
             }
             // reverse(dad->children.begin(),dad->children.end());
             top = st_state.top();
