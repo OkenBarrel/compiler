@@ -280,6 +280,7 @@ symbolTableNode scan_else(std::string in,int* error){
     symbolTableNode res=symbolTableNode(t,code,in);
     return res;
 }
+
 std::queue<std::string> sep_words(std::string in){
     int type=tellType(in[0]);
     int i=0;
@@ -296,7 +297,7 @@ std::queue<std::string> sep_words(std::string in){
             t.push_back(in[i]);
             break;
         }
-        if(curtype==type && type!= IS_SYMBOL ){
+        if(curtype==type && (type!= IS_SYMBOL)){
             t.push_back(in[i]);
         }else{
             if(in[i-1]=='0'&&(in[i]=='x'||in[i]=='X')){
@@ -305,9 +306,23 @@ std::queue<std::string> sep_words(std::string in){
             if(tellType(in[i-1])==IS_LETTER && (tellType(in[i])==IS_DIGIT)){
                 FLAG=true;
             }
+            if(in[i-1]=='<'){
+                if(in[i]=='=' || in[i]=='>'){
+                    t.push_back(in[i]);
+                    i++;
+                    continue;
+                }
+            }else if(in[i-1]=='>'){
+                if(in[i]=='='){
+                    t.push_back(in[i]);
+                    i++;
+                    continue;
+                }
+            }
             if((tellType(in[i-1])==IS_LETTER || tellType(in[i-1])==IS_DIGIT) && (tellType(in[i])==IS_SYMBOL)){
                 FLAG=false;
             }
+
 
             if(FLAG==false){
                 type=curtype;
@@ -328,6 +343,7 @@ std::queue<std::string> sep_words(std::string in){
 
     return tmpQ;
 }
+
 int tellType(char ch){
     if(ch>='0' && ch <='9'){
         return IS_DIGIT;

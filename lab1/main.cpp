@@ -38,6 +38,7 @@ int main(){
         linkQ.push(linkQ.front());
         linkQ.pop();
     }
+    
     system("pause");
     
     while(!linkQ.empty()){
