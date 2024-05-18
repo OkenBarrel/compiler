@@ -1,6 +1,43 @@
 #include "syntax_anl.h"
 #include <fstream>
 
+void errorMsg(int e){
+    cout<<"error: ";
+    switch (e)
+    {
+    case ERROR1:
+        cout<<"need relop (>, <, <= .etc)";
+        break;
+    case ERROR2:
+        cout<<"( ) doesn't match, witout (";
+        break;
+    case ERROR3:
+        cout<<"need assignment(id=E) or control(if, while)";
+        break;
+    case ERROR4:
+        cout<<"need id or intx as oprand";
+        break;
+    case ERROR5:
+        cout<<"need op (+, - .etc)";
+        break;
+    case ERROR6:
+        cout<<"need = to finish assighment";
+        break;
+    case ERROR7:
+        cout<<"while or if not finished";
+        break;
+    case ERROR8:
+        cout<<"need ; to finish";
+        break;
+    case ERROR9:
+        cout<<"( ) doesn't match, need )";
+        break;
+    default:
+        break;
+    }
+    cout<<endl;
+}
+
 void printTree(TreeNode *root){
     if(root==nullptr){
         cout<<"root is empty"<<endl;
@@ -77,7 +114,7 @@ PredictTable_LR::PredictTable_LR(CFG_LR1 lr1)
     for (auto it : lr1.getItemset())
     {
         action a;
-        a.state = ERROR;
+        a.state = EMPTY;
         for (auto vt : actionHeader)
         {
             table[it.first][vt] = a;
@@ -98,9 +135,9 @@ PredictTable_LR::PredictTable_LR(CFG_LR1 lr1)
             {
                 action i;
                 i.state = ACCEPT;
-                if (table[it.first]["#"].state != ERROR)
+                if (table[it.first]["#"].state != EMPTY)
                 {
-                    cout<<"error1 at "<<to_string(it.first)<<endl;
+                    cout<<"conflict1 at "<<to_string(it.first)<<endl;
                     isLLR1 = false;
                 }
                 table[it.first]["#"] = i;
@@ -116,10 +153,10 @@ PredictTable_LR::PredictTable_LR(CFG_LR1 lr1)
         a.state = STATE;
         a.num = g.next;
         
-        if (table[g.first][g.sign].state != ERROR)
+        if (table[g.first][g.sign].state != EMPTY)
         {
             isLLR1 = false;
-            cout<<"error2 at "<<to_string(g.first)<<" "<<g.sign<<table[g.first][g.sign].state<<endl;
+            cout<<"conflict2 at "<<to_string(g.first)<<" "<<g.sign<<table[g.first][g.sign].state<<endl;
         }
         table[g.first][g.sign] = a;
         // cout<<"creating move in action "<<g.first<<" "<<g.sign<<endl;
@@ -169,20 +206,82 @@ PredictTable_LR::PredictTable_LR(CFG_LR1 lr1)
                 //         table[its.first][str] = a;
                 //     }
                 // }
-                for (auto s : it.symbol)
-                {
-                    if (table[its.first][s].state != ERROR)
-                    {
-                        cout<<"error4 at "<<to_string(its.first)<<" "<<s<<table[its.first][s].state<<" "<<table[its.first][s].num<<endl;
-                        isLLR1 = false;
-                    }
-                    table[its.first][s] = a;
-                    // cout<<"creating back up action "<<its.first<<" "<<s<<endl;
 
+                for(auto &t:table[its.first]){
+                    if(t.second.state == EMPTY) t.second = a;
                 }
+
+                // for (auto s : it.symbol)
+                // {
+                //     if (table[its.first][s].state != EMPTY)
+                //     {
+                //         cout<<"conflict4 at "<<to_string(its.first)<<" "<<s<<table[its.first][s].state<<" "<<table[its.first][s].num<<endl;
+                //         isLLR1 = false;
+                //     }
+                //     table[its.first][s] = a;
+                //     // cout<<"creating back up action "<<its.first<<" "<<s<<endl;
+
+                // }
             }
         }
     }
+    // 错误处理
+    for(auto its:lr1.getItemset()){
+        int state=its.first;
+        for(item it:its.second){
+            int dot=it.dot;
+            if(dot==-1) continue;
+            string sign=it.pro.right[dot];
+            if(lr1.isVN(sign)) continue;
+            if(table[state][")"].state==EMPTY) table[state][")"].state=ERROR2;
+            if(sign=="<" || sign==">"|| sign=="<>"|| sign==">="|| sign=="<="||sign=="=="){
+                // cout<<"state"<<state<<" creating error1"<<endl;
+                for(auto &t:table[state]){
+                    // cout<<t.second.state<<" ";
+                    if(t.second.state==EMPTY) t.second.state=ERROR1;
+                }
+                cout<<endl;
+            }else if(sign=="if"||sign=="while"){
+                for(auto &t:table[state]){
+                    // cout<<t.second.state<<" ";
+                    if(t.second.state==EMPTY) t.second.state=ERROR3;
+                }
+            }else if(sign=="id"||sign.substr(0,3)=="int"||sign=="("){
+                for(auto &t:table[state]){
+                    // cout<<t.second.state<<" ";
+                    if(t.second.state==EMPTY) t.second.state=ERROR4;
+                }
+            }else if(sign=="+"||sign=="-"||sign=="*"||sign=="/"){
+                for(auto &t:table[state]){
+                    // cout<<t.second.state<<" ";
+                    if(t.second.state==EMPTY) t.second.state=ERROR5;
+                }
+            }else if(sign=="="){
+                for(auto &t:table[state]){
+                    // cout<<t.second.state<<" ";
+                    if(t.second.state==EMPTY) t.second.state=ERROR6;
+                }
+            }else if(sign=="else"||sign=="do"||sign=="then"){
+                for(auto &t:table[state]){
+                    // cout<<t.second.state<<" ";
+                    if(t.second.state==EMPTY) t.second.state=ERROR7;
+                }
+            }
+            else if(sign==";"){
+                for(auto &t:table[state]){
+                    // cout<<t.second.state<<" ";
+                    if(t.second.state==EMPTY) t.second.state=ERROR8;
+                }
+            }else if(sign==")"){
+                for(auto &t:table[state]){
+                    // cout<<t.second.state<<" ";
+                    if(t.second.state==EMPTY) t.second.state=ERROR9;
+                }
+            }
+            
+        }
+    }
+    
 
     if (isLLR1)
     {
@@ -271,7 +370,7 @@ bool PredictTable_LR::analyse(string path){
         cout<<endl;
         // cout<<str_top<<"            ";
         cout << s << "      ";
-        if (a.state == ERROR){   
+        if (a.state >= EMPTY){   
             a=table[top]["~"];
             str_top="~";
             s="~";
@@ -281,8 +380,9 @@ bool PredictTable_LR::analyse(string path){
             // cout << "doing~"<<a.state <<" "<<table[top]["~"].num<< endl;
             // return false;
         }
-        if (a.state == ERROR){
-            cout << "error1, stopped" << endl;
+        if (a.state >= EMPTY){
+            cout << "error1, stopped " <<a.state<< endl;
+            errorMsg(a.state);
             return false;
         }
         else if (a.state == STATE){
@@ -399,7 +499,12 @@ ostream &operator<<(ostream &os, PredictTable_LR &lrtable)
                 os.width(6);
                 os << s;
             }
-            else
+            else if(a.state>=ERROR1){
+                string s = "e"+to_string(a.state-3);
+                os.setf(ios::left);
+                os.width(6);
+                os << s;
+            }else
             {
                 os << "      ";
             }

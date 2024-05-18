@@ -19,6 +19,7 @@ int parsing(string proPath,string testPath){
     lr1.outPutItem();
     PredictTable_LR lr1table(lr1);
     cout << lr1table;
+    system("pause");
     if (lr1table.analyse(testPath))
         cout << "syntax is right!" << endl;
     else
@@ -94,7 +95,7 @@ int lexi(string path){
 int main(){
 
 
-    lexi("testing.txt");
+    // lexi("testing.txt");
     parsing("lab2/production.txt","testing.txt");
     return 0;
 }

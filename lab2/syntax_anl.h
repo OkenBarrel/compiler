@@ -123,7 +123,7 @@ struct item{
     }
     bool operator==(item it) const //重载==比较
     {
-        return (pro == it.pro && dot == it.dot&& symbol == it.symbol);
+        return (pro == it.pro && dot == it.dot&& symbol == it.symbol);//&& symbol == it.symbol
     }
 };
 
@@ -131,7 +131,16 @@ enum ActionState{
     STATE,
     REVERSE,
     ACCEPT,
-    ERROR,
+    EMPTY,
+    ERROR1,//等待比较符号
+    ERROR2,//只有)
+    ERROR3,//等待赋值或语法结构
+    ERROR4,//等待运算数或标识符
+    ERROR5,//等待运算符 + -
+    ERROR6,//等待赋值=
+    ERROR7,//while if语法不全
+    ERROR8,//没有;
+    ERROR9,//没有）
 };
 
 struct Goto{

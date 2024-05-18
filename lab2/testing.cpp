@@ -20,12 +20,5 @@ int main()
         cout << "syntax is right!" << endl;
     else
         cout << "syntax is wrong!" << endl;
-
-    // delete root;
-    // delete child1;
-    // delete child2;
-    // delete child3;
-    // delete grandchild1;
-    // delete grandchild2;
     return 0;
 }
