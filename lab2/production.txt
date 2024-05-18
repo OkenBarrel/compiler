@@ -16,9 +16,9 @@ S -> while C do S
 C -> E > E
 C -> E >= E
 C -> E < E
+C -> E = E
 C -> E <= E
 C -> E <> E
-C -> E = E
 E -> T E'
 E' -> + T E'
 E' -> - T E'

@@ -1,5 +1,2 @@
-IDN a
-DEC 3
-EQ =
-DEC 4
-ADD +
+while int10 int8 d0
+    id = id + id ;
