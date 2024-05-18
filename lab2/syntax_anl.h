@@ -14,14 +14,14 @@ using namespace std;
 
 // seta=seta U setb seta未改变返回值为false，否则为true
 struct TreeNode{
-    string name;
+    string syntaxType;
     vector<TreeNode*> children;
     TreeNode *father;
     int place;
     string code;
     TreeNode(){}
     TreeNode(string n){
-        name=n;
+        syntaxType=n;
         father=nullptr;
         place=-1;
         code="";

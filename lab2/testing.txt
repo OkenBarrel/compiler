@@ -1,2 +1,2 @@
-while int10 int8 do
+while int10 <= int8 do
     id = id + id ;
