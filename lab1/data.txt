@@ -1,7 +1,19 @@
 while 
 SLP (
-IDN a3
-ADD +
-IDN b4
+IDN a
+GE >=
+IDN b
+IDN b
+LE <=
+IDN c
 SRP )
+IDN a
+EQ =
+IDN a
+ADD +
+DEC 1
+SEMI ;
+IDN b
+EQ =
+DEC 0
 SEMI ;
