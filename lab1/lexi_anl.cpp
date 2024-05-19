@@ -4,30 +4,30 @@
 #include <queue>
 #include "lexi_class.h"
 #include "lexi_anl.h"
-enum TOKEN{
-    DEC,
-    ILDEC,
-    OCT,
-    ILOCT,
-    HEX,
-    ILHEX,
-    IDN,//6
-    ADD,
-    SUB,
-    MUL,
-    DIV,
-    GT,
-    LT,
-    EQ,
-    GE,
-    LE,
-    NEQ,
-    SLP,
-    SRP,
-    SEMI,
-    FUNC,
-    ERROR
-};
+// enum TOKEN{
+//     DEC,
+//     ILDEC,
+//     OCT,
+//     ILOCT,
+//     HEX,
+//     ILHEX,
+//     IDN,//6
+//     ADD,
+//     SUB,
+//     MUL,
+//     DIV,
+//     GT,
+//     LT,
+//     EQ,
+//     GE,
+//     LE,
+//     NEQ,
+//     SLP,
+//     SRP,
+//     SEMI,
+//     FUNC,
+//     ERROR
+// };
 
 void hello(){
     std::cout<<"heeeeellooooo!!"<<std::endl;
