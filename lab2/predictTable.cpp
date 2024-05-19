@@ -858,14 +858,24 @@ bool PredictTable_LR::analyse(deque<symbolTableNode> toSyn){
                                 // }
                                 break;
                             case 3://P -> L P
-                                if(ttop->next!=-1){
-                                    ttop->children[1]->begin=ttop->next;
-                                    
-                                }
-                                if(ttop->begin!=-1){
+                                
+                                if(ttop->begin != -1){
                                     ttop->children[0]->begin=ttop->begin;
-                                    
+                                    ttop->begin=-1;
                                 }
+                                if(ttop->begin == -1){
+                                    ttop->children[0]->next=ttop->children[1]->begin=label;
+                                    cout<<"3: "<<ttop->children[0]->next<<endl;
+                                    label++;
+                                }
+                                // if(ttop->next!=-1){
+                                //     ttop->children[1]->begin=ttop->next;
+                                    
+                                // }
+                                // if(ttop->begin!=-1){
+                                //     ttop->children[0]->begin=ttop->begin;
+                                    
+                                // }
                                 // ttop->children[1]->begin=ttop->next;
                                 // for(TreeNode* tn:ttop->children){
                                 //     ttop->code.append("!");
@@ -897,8 +907,9 @@ bool PredictTable_LR::analyse(deque<symbolTableNode> toSyn){
                                 // ttop->code.append(gen);
                                 break;
                             case 6://S -> if C then S
-                                ttop->next=label;
-                                label++;
+                                // ttop->next=label;
+                                
+                                // label++;
                                 ttop->children[1]->T=label;
                                 label++;
 
@@ -914,8 +925,9 @@ bool PredictTable_LR::analyse(deque<symbolTableNode> toSyn){
                                 // ttop->code.append((ttop->children)[3]->code);
                                 break;
                             case 7://S -> if C then S else S
-                                ttop->next=label;
-                                label++;
+                                // ttop->next=label;
+
+                                // label++;
                                 ttop->children[1]->T=label;
                                 label++;
                                 ttop->children[1]->F=label;
@@ -945,13 +957,14 @@ bool PredictTable_LR::analyse(deque<symbolTableNode> toSyn){
                                 // ttop->code.append((ttop->children)[5]->code);
                                 break;
                             case 8://S -> while C do S
-                                ttop->next=label;
-                                label++;
+                                // ttop->next=label;
+                                // label++;
                                 ttop->begin=label;
                                 label++;
                                 (ttop->children)[1]->T=label;
                                 label++;
                                 (ttop->children)[1]->F=ttop->next;
+                                cout<<"8: "<<(ttop->children)[1]->F<<" "<<ttop->next<<endl;
                                 (ttop->children)[3]->next=ttop->begin;
                                 break;
                             case 9://C -> E > E
@@ -1074,9 +1087,9 @@ bool PredictTable_LR::analyse(deque<symbolTableNode> toSyn){
                                 }
                                 break;
                             case 3://P -> L P
-                                if(ttop->next==-1){
-                                    ttop->next=ttop->children[0]->next;
-                                }
+                                // if(ttop->next==-1){
+                                //     ttop->next=ttop->children[0]->next;
+                                // }
                                 
                                 for(TreeNode* tn:ttop->children){
                                     ttop->code.append("!");
@@ -1088,9 +1101,9 @@ bool PredictTable_LR::analyse(deque<symbolTableNode> toSyn){
                                 }
                                 break;
                             case 4://L -> S ;
-                                if(ttop->next==-1){
-                                    ttop->next=ttop->children[0]->next;
-                                }
+                                // if(ttop->next==-1){
+                                //     ttop->next=ttop->children[0]->next;
+                                // }
                                 
                                 if(ttop->begin!=-1){
                                     ttop->code.append(to_string(ttop->begin));

@@ -1,9 +1,13 @@
-if 
+while 
 IDN a
 LE <=
 DEC 0
-then 
+do 
 IDN a
 EQ =
-DEC 1
+DEC 2
+SEMI ;
+IDN a
+EQ =
+DEC 3
 SEMI ;
