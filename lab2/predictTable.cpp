@@ -321,24 +321,56 @@ bool PredictTable_LR::analyse(string path,deque<symbolTableNode> toSyn){
     vector<string> l;
     vector<TreeNode*> ll;
     string str;
-    ifstream infile;
-    infile.open(path);
-    if(infile.is_open()) cout<<"yes"<<endl;
-    do{
-        infile >> str;
-        cout<<str<<endl;
-        l.push_back(str);
+    // ifstream infile;
+    // infile.open(path);
+    for(symbolTableNode it:toSyn){
+        switch (it.typeCode)
+        {
+            case IDN:
+                l.push_back("id");
+                break;
+            case DEC:
+                l.push_back("int10");
+                break;
+            case OCT:
+                l.push_back("int8");
+                break;
+            case HEX:
+                l.push_back("int16");
+                    break;
+            case ILDEC:
+            case ILOCT:
+            case ILHEX:
+                break;
+            case FUNC:
+                l.push_back(it.type);
+                break;
+            default:
+                l.push_back(it.props);
+                break;
+        }
+    }
+    // if(infile.is_open()) cout<<"yes"<<endl;
+    // do{
+    //     infile >> str;
+    //     cout<<str<<endl;
+    //     l.push_back(str);
 
-        TreeNode* temp=new TreeNode(str);
-        ll.push_back(temp);
+    //     TreeNode* temp=new TreeNode(str);
+    //     ll.push_back(temp);
 
-    } while (!infile.eof());
+    // } while (!infile.eof());
     l.push_back("#");
+    cout<<"this is vec: ";
+
+    for(string t:l){
+        cout<<t<<" ";
+    }
 
     TreeNode* temp=new TreeNode("#");
     ll.push_back(temp);
 
-    infile.close();
+    // infile.close();
     cout << endl;
 
     for (auto i : l){

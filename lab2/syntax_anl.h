@@ -9,6 +9,7 @@
 #include <map>
 #include <queue>
 #include <stack>
+#include "../lab1/lexi_class.h"
 
 using namespace std;
 
