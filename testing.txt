@@ -1,2 +1,10 @@
-while int10 int8 d0
-    id = id + id ;
+IDN x
+EQ =
+SLP (
+IDN y
+ADD +
+IDN z
+SRP )
+DIV /
+HEX 58
+SEMI ;

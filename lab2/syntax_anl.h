@@ -15,16 +15,34 @@ using namespace std;
 
 // seta=seta U setb seta未改变返回值为false，否则为true
 struct TreeNode{
+    string places;
     string syntaxType;
     vector<TreeNode*> children;
     TreeNode *father;
     int place;
     string code;
     TreeNode(){}
-    TreeNode(string n){
-        syntaxType=n;
+    TreeNode(string syn){
+        syntaxType=syn;
         father=nullptr;
         place=-1;
+        places="";
+        code="";
+        // father=dad;
+    }
+    TreeNode(string syn,string ps){
+        syntaxType=syn;
+        father=nullptr;
+        places=ps;
+        place=-1;
+        code="";
+        // father=dad;
+    }
+    TreeNode(string syn,int p){
+        syntaxType=syn;
+        father=nullptr;
+        places="";
+        place=p;
         code="";
         // father=dad;
     }
