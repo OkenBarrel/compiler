@@ -412,6 +412,7 @@ bool PredictTable_LR::analyse(string path){
 
             int proId;
             // vector<TreeNode*> kids;
+            proId=a.num;
 
             TreeNode* dad=new TreeNode(f.left);
 
@@ -431,19 +432,218 @@ bool PredictTable_LR::analyse(string path){
             }
             string gen;
             switch (proId){
-                case 1:
-                case 2:
-                case 3:
-                case 4:
+                case 1://P' -> P
                     for(TreeNode* tn:dad->children){
                         if(tn->code=="") continue;
                         dad->code.append("\n");
                         dad->code.append(tn->code);
                     }
-                    if(proId!=4) break;
-                    gen=to_string((dad->children)[0]->place)+":="+to_string((dad->children)[0]->place);
+                    break;
+                case 2://P -> L
+                    for(TreeNode* tn:dad->children){
+                        if(tn->code=="") continue;
+                        dad->code.append("\n");
+                        dad->code.append(tn->code);
+                    }
+                    break;
+                case 3://P -> L P
+                    for(TreeNode* tn:dad->children){
+                        if(tn->code=="") continue;
+                        dad->code.append("\n");
+                        dad->code.append(tn->code);
+                    }
+                    break;
+                case 4://L -> S 
+                    for(TreeNode* tn:dad->children){
+                        if(tn->code=="") continue;
+                        dad->code.append("\n");
+                        dad->code.append(tn->code);
+                    }
+                    break;
+                case 5://S -> id = E
+                    for(TreeNode* tn:dad->children){
+                        if(tn->code=="") continue;
+                        dad->code.append("\n");
+                        dad->code.append(tn->code);
+                    }
+                    gen=to_string((dad->children)[0]->place)+" := "+to_string((dad->children)[0]->place);
                     dad->code.append(gen);
-                
+                    break;
+                case 6://S -> if C then S
+                    //C.true=newlabel
+
+                    (dad->children)[1]->F=dad->next;
+                    (dad->children)[2]->next=dad->next;
+
+                    dad->code.append("\n");
+                    dad->code.append((dad->children)[0]->code);
+                    
+                    dad->code.append("\n");
+                    gen=to_string((dad->children)[0]->T)+" : ";
+                    dad->code.append(gen);
+                    
+                    dad->code.append("\n");
+                    dad->code.append((dad->children)[1]->code);
+                    break;
+                case 7://S -> if C then S else S
+                    //C.true=newlabel
+                    //C.false=newlabel
+
+                    (dad->children)[1]->next=dad->next;
+                    (dad->children)[0]->next=(dad->children)[1]->next;
+
+                    dad->code.append("\n");
+                    dad->code.append((dad->children)[0]->code);
+
+                    gen=to_string((dad->children)[0]->T)+" : ";
+                    dad->code.append(gen);
+
+                    dad->code.append((dad->children)[1]->code);
+
+                    gen=" goto "+to_string(dad->next);
+                    dad->code.append(gen);
+
+                    dad->code.append("\n");
+                    gen=" goto "+to_string(dad->next);
+                    dad->code.append(gen);
+
+                    dad->code.append("\n");
+                    gen=to_string((dad->children)[0]->F)+" : ";
+                    dad->code.append(gen);
+
+                    dad->code.append("\n");
+                    dad->code.append((dad->children)[2]->code);
+                    break;
+                case 8://S -> while C do S
+                    //dad->begin=newlabel
+                    //dad->true=newlabel
+                    (dad->children)[1]->F=dad->next;
+
+                    dad->code.append("\n");
+                    gen=to_string(dad->begin)+" : ";
+                    dad->code.append(gen);
+
+                    dad->code.append((dad->children)[0]->code);
+
+                    dad->code.append("\n");
+                    gen=to_string((dad->children)[0]->T)+" : ";
+                    dad->code.append(gen);
+
+                    dad->code.append((dad->children)[1]->code);
+
+                    dad->code.append("\n");
+                    gen=" goto "+to_string(dad->begin);
+                    dad->code.append(gen);
+                    break;
+                case 9://C -> E > E
+                    for(TreeNode* tn:dad->children){
+                        if(tn->code=="") continue;
+                        dad->code.append("\n");
+                        dad->code.append(tn->code);
+                    }
+                    gen="if "+to_string((dad->children)[0]->place)+" > "+to_string((dad->children)[2]->place)+" goto "+to_string(dad->T);
+                    dad->code.append(gen);
+                    dad->code.append("\n");
+                    gen="goto "+to_string(dad->F);
+                    break;
+                case 10://C -> E >= E
+                    for(TreeNode* tn:dad->children){
+                        if(tn->code=="") continue;
+                        dad->code.append("\n");
+                        dad->code.append(tn->code);
+                    }
+                    gen="if "+to_string((dad->children)[0]->place)+" >= "+to_string((dad->children)[2]->place)+" goto "+to_string(dad->T);
+                    dad->code.append(gen);
+                    dad->code.append("\n");
+                    gen="goto "+to_string(dad->F);
+                    break;
+                case 11://C -> E < E
+                    for(TreeNode* tn:dad->children){
+                        if(tn->code=="") continue;
+                        dad->code.append("\n");
+                        dad->code.append(tn->code);
+                    }
+                    gen="if "+to_string((dad->children)[0]->place)+" < "+to_string((dad->children)[2]->place)+" goto "+to_string(dad->T);
+                    dad->code.append(gen);
+                    dad->code.append("\n");
+                    gen="goto "+to_string(dad->F);
+                    break;
+                case 12://C -> E = E
+                    for(TreeNode* tn:dad->children){
+                        if(tn->code=="") continue;
+                        dad->code.append("\n");
+                        dad->code.append(tn->code);
+                    }
+                    gen="if "+to_string((dad->children)[0]->place)+" = "+to_string((dad->children)[2]->place)+" goto "+to_string(dad->T);
+                    dad->code.append(gen);
+                    dad->code.append("\n");
+                    gen="goto "+to_string(dad->F);
+                    break;
+                case 13://C -> E <= E
+                    for(TreeNode* tn:dad->children){
+                        if(tn->code=="") continue;
+                        dad->code.append("\n");
+                        dad->code.append(tn->code);
+                    }
+                    gen="if "+to_string((dad->children)[0]->place)+" <= "+to_string((dad->children)[2]->place)+" goto "+to_string(dad->T);
+                    dad->code.append(gen);
+                    dad->code.append("\n");
+                    gen="goto "+to_string(dad->F);
+                    break;
+                case 14://C -> E <> E
+                    for(TreeNode* tn:dad->children){
+                        if(tn->code=="") continue;
+                        dad->code.append("\n");
+                        dad->code.append(tn->code);
+                    }
+                    gen="if "+to_string((dad->children)[0]->place)+" <> "+to_string((dad->children)[2]->place)+" goto "+to_string(dad->T);
+                    dad->code.append(gen);
+                    dad->code.append("\n");
+                    gen="goto "+to_string(dad->F);
+                    break;
+                case 15://E -> T E'
+
+                    break;
+                case 16://E' -> + T E'
+
+                    break;
+                case 17://E' -> - T E'
+
+                    break;
+                case 18://E' -> ~
+
+                    break;
+                case 19://T -> F T'
+
+                    break;
+                case 20://T' -> * F T'
+
+                    break;
+                case 21://T' -> / F T'
+
+                    break;
+                case 22://T' -> ~
+
+                    break;
+                case 23://F -> ( E )
+
+                    break;
+                case 24://F -> id
+                    dad->place=dad->children->name;
+                    dad->code="";
+                    break;
+                case 25://F -> int8
+                    dad->place=dad->children->place;
+                    dad->code="";
+                    break;
+                case 26://F -> int10
+                    dad->place=dad->children->place;
+                    dad->code="";
+                    break;
+                case 27://F -> int16
+                    dad->place=dad->children->place;
+                    dad->code="";
+                    break;
                 default:
                     break;
             }

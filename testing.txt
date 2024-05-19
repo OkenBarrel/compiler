@@ -1,2 +1,1 @@
-while int10 int8 d0
-    id = id + id ;
+id = ( id + id ) * id ;

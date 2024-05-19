@@ -95,7 +95,8 @@ int lexi(string path){
 int main(){
 
 
-    // lexi("testing.txt");
+    //lexi("testing.txt");
     parsing("lab2/production.txt","testing.txt");
+    system("pause");
     return 0;
 }

@@ -18,7 +18,14 @@ struct TreeNode{
     vector<TreeNode*> children;
     TreeNode *father;
     int place;
+    string placeS;
     string code;
+    int next;
+    int begin;
+    int T;
+    int F;
+    // int 
+
     TreeNode(){}
     TreeNode(string n){
         syntaxType=n;
