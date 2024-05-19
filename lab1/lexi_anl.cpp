@@ -4,30 +4,30 @@
 #include <queue>
 #include "lexi_class.h"
 #include "lexi_anl.h"
-enum TOKEN{
-    DEC,
-    ILDEC,
-    OCT,
-    ILOCT,
-    HEX,
-    ILHEX,
-    IDN,//6
-    ADD,
-    SUB,
-    MUL,
-    DIV,
-    GT,
-    LT,
-    EQ,
-    GE,
-    LE,
-    NEQ,
-    SLP,
-    SRP,
-    SEMI,
-    FUNC,
-    ERROR
-};
+// enum TOKEN{
+//     DEC,
+//     ILDEC,
+//     OCT,
+//     ILOCT,
+//     HEX,
+//     ILHEX,
+//     IDN,//6
+//     ADD,
+//     SUB,
+//     MUL,
+//     DIV,
+//     GT,
+//     LT,
+//     EQ,
+//     GE,
+//     LE,
+//     NEQ,
+//     SLP,
+//     SRP,
+//     SEMI,
+//     FUNC,
+//     ERROR
+// };
 
 void hello(){
     std::cout<<"heeeeellooooo!!"<<std::endl;
@@ -91,6 +91,7 @@ symbolTableNode scan_digit(std::string in,int* error){
             
             if(i==in.size()){
                 state=5;
+                continue;
             }else if(in[i]>='0' && in[i]<='7'){
                 i++;
                 continue;
@@ -98,7 +99,7 @@ symbolTableNode scan_digit(std::string in,int* error){
                 state=9;
                 continue;
             }
-            std::cout<<"error3"<<std::endl;
+            std::cout<<"error3: "<<in<<" "<<i<<" "<<in[i]<<std::endl;
         }else if(state==6){
             if(i==in.size()){
                 state=10;

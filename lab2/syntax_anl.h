@@ -9,11 +9,13 @@
 #include <map>
 #include <queue>
 #include <stack>
+#include "../lab1/lexi_class.h"
 
 using namespace std;
 
 // seta=seta U setb seta未改变返回值为false，否则为true
 struct TreeNode{
+    string places;
     string syntaxType;
     vector<TreeNode*> children;
     TreeNode *father;
@@ -27,10 +29,27 @@ struct TreeNode{
     // int 
 
     TreeNode(){}
-    TreeNode(string n){
-        syntaxType=n;
+    TreeNode(string syn){
+        syntaxType=syn;
         father=nullptr;
         place=-1;
+        places="";
+        code="";
+        // father=dad;
+    }
+    TreeNode(string syn,string ps){
+        syntaxType=syn;
+        father=nullptr;
+        places=ps;
+        place=-1;
+        code="";
+        // father=dad;
+    }
+    TreeNode(string syn,int p){
+        syntaxType=syn;
+        father=nullptr;
+        places="";
+        place=p;
         code="";
         // father=dad;
     }
@@ -45,32 +64,6 @@ struct TreeNode{
         return false;
     }
 };
-
-// void printTree(treeNode *root){
-//     if(root==nullptr){
-//         cout<<"root is empty"<<endl;
-//         return;
-//     }
-//     std::deque<treeNode*> currentLevel;
-//     std::deque<treeNode*> nextLevel;
-//     treeNode *fa;
-//     currentLevel.push_back(root);
-
-//     while (!currentLevel.empty()) {
-//         fa=currentLevel.front()->father;
-//         for (treeNode* node : currentLevel) {
-//             if(fa!=node->father) cout<<"| father: "<<fa->name<<" ";
-//             std::cout << node->name << " ";
-//             for (treeNode* child : node->children) {
-//                 nextLevel.push_back(child);
-//             }
-//         }
-//         std::cout << std::endl;
-//         currentLevel.swap(nextLevel);
-//         nextLevel.clear();
-//     }
-// }
-
 struct Production{
     string left;
     vector<string> right;
@@ -247,5 +240,5 @@ public:
     //重载<<输出分析表
     friend ostream &operator<<(ostream &os, PredictTable_LR &lrtable);
     //分析串
-    bool analyse(string path);
+    bool analyse(deque<symbolTableNode> tosyn);
 };

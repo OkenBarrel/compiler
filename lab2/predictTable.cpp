@@ -1,4 +1,5 @@
 #include "syntax_anl.h"
+#include "../lab1/lexi_anl.h"
 #include <fstream>
 
 // void doThis(int proId,){
@@ -70,7 +71,7 @@ void printTree(TreeNode *root){
                 fa=node->father;
                 cout<<"| father "<<fa->syntaxType<<": ";
             }
-            std::cout << node->syntaxType << " ";
+            std::cout << node->syntaxType << ", prop("+node->places+")";
             for (TreeNode* child : node->children) {
                 nextLevel.push_back(child);
             }
@@ -316,40 +317,95 @@ unordered_set<string> PredictTable_LR::getGotoHeader()
     return gotoheader;
 }
 
-bool PredictTable_LR::analyse(string path){
-    vector<string> l;
+bool PredictTable_LR::analyse(deque<symbolTableNode> toSyn){
+    // vector<string> l;
+    vector<symbolTableNode> sl;
     vector<TreeNode*> ll;
     string str;
-    ifstream infile;
-    infile.open(path);
-    if(infile.is_open()) cout<<"yes"<<endl;
-    do{
-        infile >> str;
-        cout<<str<<endl;
-        l.push_back(str);
+    // ifstream infile;
+    // infile.open(path);
+    for(symbolTableNode it:toSyn){
+        string syntaxType;
+        string props;
+        // ll.push_back();
+        switch (it.typeCode)
+        {
+            
+            case IDN:
+                syntaxType="id";
+                props=it.props;
+                // l.push_back("id");
+                break;
+            case DEC:
+                props=to_string(it.prop);
+                syntaxType="int10";
+                // l.push_back("int10");
+                break;
+            case OCT:
+                props=to_string(it.prop);
+                syntaxType="int8";
+                // l.push_back("int8");
+                break;
+            case HEX:
+                props=to_string(it.prop);
+                syntaxType="int16";
+                // l.push_back("int16");
+                    break;
+            case ILDEC:
+            case ILOCT:
+            case ILHEX:
+                break;
+            case FUNC:
+                props="-";
+                syntaxType=it.type;
+                // l.push_back(it.type);
+                break;
+            default:
+                props="-";
+                syntaxType=it.props;
+                // l.push_back(it.props);
+                break;
+        }
+        TreeNode *t=new TreeNode(syntaxType,props);
+        ll.push_back(t);
+    }
+    // if(infile.is_open()) cout<<"yes"<<endl;
+    // do{
+    //     infile >> str;
+    //     cout<<str<<endl;
+    //     l.push_back(str);
 
-        TreeNode* temp=new TreeNode(str);
-        ll.push_back(temp);
+    //     TreeNode* temp=new TreeNode(str);
+    //     ll.push_back(temp);
 
-    } while (!infile.eof());
-    l.push_back("#");
+    // } while (!infile.eof());
+    // l.push_back("#");
+    cout<<"this is vec: ";
+
+    for(TreeNode *t:ll){
+        cout<<t->syntaxType<<" ";
+    }
 
     TreeNode* temp=new TreeNode("#");
     ll.push_back(temp);
 
-    infile.close();
+    // infile.close();
     cout << endl;
 
-    for (auto i : l){
-        cout << i;
-    }
+    // for (auto i : l){
+    //     cout << i;
+    // }
     cout << "   procedure:" << endl;
     stack<int> st_state;
     stack<string> st_str;
 
     stack<TreeNode*> st_tree;
 
+    // stack<string> st_prop;
+
     st_tree.push(temp);
+
+    // st_prop.push("-");
 
     st_str.push("#");
     st_state.push(0);
@@ -359,8 +415,8 @@ bool PredictTable_LR::analyse(string path){
     // cout << "------------+--------+----+";
     // cout << "-------------------------------------+-----------" << endl;
 
-    for (int i = 0; i < l.size(); i++){
-        string s = l[i];
+    for (int i = 0; i < ll.size(); i++){
+        string s = ll[i]->syntaxType;
         int top = st_state.top();
         action a = table[top][s];
         string str_top = st_str.top();
@@ -375,8 +431,8 @@ bool PredictTable_LR::analyse(string path){
         }
         cout<<endl;
         cout<<"read:  ";
-        for(int c=i;c<l.size();c++){
-            cout<<right << setw(2)<<l[c]<<" ";
+        for(int c=i;c<ll.size();c++){
+            cout<<right << setw(2)<<ll[c]->syntaxType<<" ";
         }
         cout<<endl;
         // cout<<str_top<<"            ";
@@ -399,7 +455,11 @@ bool PredictTable_LR::analyse(string path){
         else if (a.state == STATE){
             cout << 's' << left << setw(2) << a.num << " ";
             st_str.push(s);
-            TreeNode * tt=new TreeNode(s);
+            // TreeNode * tt=new TreeNode(s);
+            TreeNode * tt=new TreeNode(s,"-");
+            if(s!="~"){
+                tt=ll[i];
+            }
             st_tree.push(tt);
             st_state.push(a.num);
             if(s=="~") i--;

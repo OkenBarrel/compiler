@@ -1,1 +1,14 @@
+<<<<<<< HEAD
 id = ( id + id ) * id ;
+=======
+IDN x
+EQ =
+SLP (
+IDN y
+ADD +
+IDN z
+SRP )
+DIV /
+HEX 58
+SEMI ;
+>>>>>>> 7921762145dea8ee35224f39b38a0b073806bdc9
