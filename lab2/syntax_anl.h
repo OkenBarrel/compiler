@@ -57,32 +57,6 @@ struct TreeNode{
         return false;
     }
 };
-
-// void printTree(treeNode *root){
-//     if(root==nullptr){
-//         cout<<"root is empty"<<endl;
-//         return;
-//     }
-//     std::deque<treeNode*> currentLevel;
-//     std::deque<treeNode*> nextLevel;
-//     treeNode *fa;
-//     currentLevel.push_back(root);
-
-//     while (!currentLevel.empty()) {
-//         fa=currentLevel.front()->father;
-//         for (treeNode* node : currentLevel) {
-//             if(fa!=node->father) cout<<"| father: "<<fa->name<<" ";
-//             std::cout << node->name << " ";
-//             for (treeNode* child : node->children) {
-//                 nextLevel.push_back(child);
-//             }
-//         }
-//         std::cout << std::endl;
-//         currentLevel.swap(nextLevel);
-//         nextLevel.clear();
-//     }
-// }
-
 struct Production{
     string left;
     vector<string> right;
@@ -259,5 +233,5 @@ public:
     //重载<<输出分析表
     friend ostream &operator<<(ostream &os, PredictTable_LR &lrtable);
     //分析串
-    bool analyse(string path,deque<symbolTableNode> tosyn);
+    bool analyse(deque<symbolTableNode> tosyn);
 };

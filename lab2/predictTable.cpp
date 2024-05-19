@@ -317,7 +317,7 @@ unordered_set<string> PredictTable_LR::getGotoHeader()
     return gotoheader;
 }
 
-bool PredictTable_LR::analyse(string path,deque<symbolTableNode> toSyn){
+bool PredictTable_LR::analyse(deque<symbolTableNode> toSyn){
     // vector<string> l;
     vector<symbolTableNode> sl;
     vector<TreeNode*> ll;
