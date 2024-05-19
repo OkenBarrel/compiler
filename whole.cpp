@@ -11,7 +11,7 @@
 
 using namespace std;
 
-int parsing(string proPath,string testPath,std::deque<symbolTableNode> toSyn){
+int parsing(string proPath,std::deque<symbolTableNode> toSyn){
     CFG_LR1 lr1(proPath);
     // cin >> lr1;
     cout << lr1;
@@ -20,7 +20,7 @@ int parsing(string proPath,string testPath,std::deque<symbolTableNode> toSyn){
     PredictTable_LR lr1table(lr1);
     cout << lr1table;
     system("pause");
-    if (lr1table.analyse(testPath,toSyn))
+    if (lr1table.analyse(toSyn))
         cout << "syntax is right!" << endl;
     else
         cout << "syntax is wrong!" << endl;
@@ -106,6 +106,6 @@ int main(){
     std::deque<symbolTableNode> toSyn;
     toSyn=lexi("testing.txt");
     system("pause");
-    parsing("lab2/production.txt","testing.txt",toSyn);
+    parsing("lab2/production.txt",toSyn);
     return 0;
 }
