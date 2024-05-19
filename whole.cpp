@@ -104,6 +104,12 @@ std::deque<symbolTableNode> lexi(string path){
 int main(){
 
     std::deque<symbolTableNode> toSyn;
+    // int i=22;
+    // int *a=&i;
+    // int *y=a;
+    // cout<<i<<" "<<*a<<" "<<*y<<endl;
+    // i=33;
+    // cout<<i<<" "<<*a<<" "<<*y<<endl;
     toSyn=lexi("testing.txt");
     system("pause");
     parsing("lab2/production.txt",toSyn);

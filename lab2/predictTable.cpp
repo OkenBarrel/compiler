@@ -60,7 +60,8 @@ void printTree(TreeNode *root){
     TreeNode *fa;
     // currentLevel.push_back(root);
     fa=root;
-    cout<<root->syntaxType<<endl;
+    std::cout << root->syntaxType<<"po:"<<root->proId << ", prop("+root->places+") &";
+    std::cout << root->code+"@"<<endl;
     for(TreeNode *it:root->children){
         currentLevel.push_back(it);
     }
@@ -71,7 +72,7 @@ void printTree(TreeNode *root){
                 fa=node->father;
                 cout<<"| father "<<fa->syntaxType<<": ";
             }
-            std::cout << node->syntaxType << ", prop("+node->places+") &";
+            std::cout << node->syntaxType<<"po:"<<node->proId << ", prop("+node->places+") &";
             std::cout << node->code+"@";
             for (TreeNode* child : node->children) {
                 nextLevel.push_back(child);
@@ -387,7 +388,7 @@ bool PredictTable_LR::analyse(deque<symbolTableNode> toSyn){
         cout<<t->syntaxType<<" ";
     }
 
-    TreeNode* temp=new TreeNode("#");
+    TreeNode* temp=new TreeNode("#",-1);
     ll.push_back(temp);
 
     // infile.close();
@@ -476,7 +477,8 @@ bool PredictTable_LR::analyse(deque<symbolTableNode> toSyn){
             // vector<TreeNode*> kids;
             proId=a.num;
 
-            TreeNode* dad=new TreeNode(f.left);
+            TreeNode* dad=new TreeNode(f.left,a.num);
+            dad->proId=a.num;
 
 
             cout << "pop  " << left << setw(2) << f.right.size() << "tokens and states";
@@ -495,151 +497,139 @@ bool PredictTable_LR::analyse(deque<symbolTableNode> toSyn){
             string gen;
             switch (proId+1){
                 case 1://P' -> P
-                    for(TreeNode* tn:dad->children){
-                        dad->code.append("!");
-                        if(tn->code!=""){
-                            dad->code.append(tn->code);
-                        }else{
-                            dad->code.append(tn->places);
-                        }
-                    }
+                    // for(TreeNode* tn:dad->children){
+                    //     dad->code.append("!");
+                    //     if(tn->code!=""){
+                    //         dad->code.append(tn->code);
+                    //     }else{
+                    //         dad->code.append(tn->places);
+                    //     }
+                    // }
                     break;
                 case 2://P -> L
-                    for(TreeNode* tn:dad->children){
-                        // 
-                        dad->code.append("!");
-                        if(tn->code!=""){
-                            dad->code.append(tn->code);
-                        }else{
-                            dad->code.append(tn->places);
-                        }
-                    }
+                    // for(TreeNode* tn:dad->children){
+                    //     // 
+                    //     dad->code.append("!");
+                    //     if(tn->code!=""){
+                    //         dad->code.append(tn->code);
+                    //     }else{
+                    //         dad->code.append(tn->places);
+                    //     }
+                    // }
                     break;
                 case 3://P -> L P
-                    for(TreeNode* tn:dad->children){
-                        dad->code.append("!");
-                        if(tn->code!=""){
-                            dad->code.append(tn->code);
-                        }else{
-                            dad->code.append(tn->places);
-                        }
-                    }
+                    // for(TreeNode* tn:dad->children){
+                    //     dad->code.append("!");
+                    //     if(tn->code!=""){
+                    //         dad->code.append(tn->code);
+                    //     }else{
+                    //         dad->code.append(tn->places);
+                    //     }
+                    // }
                     break;
                 case 4://L -> S ;
-                    for(TreeNode* tn:dad->children){
-                        dad->code.append("!");
-                        if(tn->code!=""){
-                            dad->code.append(tn->code);
-                        }else{
-                            dad->code.append(tn->places);
-                        }
-                    }
+                    // for(TreeNode* tn:dad->children){
+                    //     dad->code.append("!");
+                    //     if(tn->code!=""){
+                    //         dad->code.append(tn->code);
+                    //     }else{
+                    //         dad->code.append(tn->places);
+                    //     }
+                    // }
                     break;
                 case 5://S -> id = E
-                    gen=((dad->children)[0]->places)+" := ";
-                    if(((dad->children)[2]->code!="")){
-                        gen+=((dad->children)[2]->code);
-                    }else{
-                        gen+=((dad->children)[2]->places);
-                    }
-                    dad->code.append(gen);
+                    // gen=((dad->children)[0]->places)+" := ";
+                    // if(((dad->children)[2]->code!="")){
+                    //     gen+=((dad->children)[2]->code);
+                    // }else{
+                    //     gen+=((dad->children)[2]->places);
+                    // }
+                    // dad->code.append(gen);
                     break;
                 case 6://S -> if C then S
-                    dad->children[1]->T=label;
-                    label++;
+                    // dad->children[1]->T=label;
+                    // label++;
 
-                    (dad->children)[1]->F=dad->next;
-                    (dad->children)[3]->next=dad->next;
+                    // (dad->children)[1]->F=dad->next;
+                    // (dad->children)[3]->next=dad->next;
 
-                    // dad->code.append("if ");
-
-                    // dad->code.append("\n");
-                    dad->code.append((dad->children)[1]->code);
-                    
-                    dad->code.append("\n");
-                    gen=to_string((dad->children)[1]->T)+" : ";
-                    dad->code.append(gen);
+                    // dad->code.append((dad->children)[1]->code);
                     
                     // dad->code.append("\n");
-                    dad->code.append((dad->children)[3]->code);
+                    // gen=to_string((dad->children)[1]->T)+" : ";
+                    // dad->code.append(gen);
+                    
+                    // dad->code.append((dad->children)[3]->code);
                     break;
                 case 7://S -> if C then S else S
-                    dad->children[1]->T=label;
-                    label++;
-                    dad->children[1]->F=label;
-                    label++;
+                    // dad->children[1]->T=label;
+                    // label++;
+                    // dad->children[1]->F=label;
+                    // label++;
 
-                    // dad->code.append("if ");
-                    (dad->children)[1]->next=dad->next;
-                    // (dad->children)[1]->T=
-                    (dad->children)[3]->next=(dad->children)[1]->next;
-
-                    // dad->code.append("\n");
-                    dad->code.append((dad->children)[1]->code);
-
-                    gen=to_string((dad->children)[1]->T)+" : ";
-                    dad->code.append(gen);
-
-                    // dad->code.append("then ");
-
-                    dad->code.append((dad->children)[3]->code);
-
-                    gen=" goto1 "+to_string(dad->next);
-                    dad->code.append(gen);
+                    // (dad->children)[1]->next=dad->next;
+                    // // (dad->children)[1]->T=
+                    // (dad->children)[3]->next=(dad->children)[1]->next;
 
                     // dad->code.append("\n");
-                    // gen=" goto "+to_string(dad->next);
+                    // dad->code.append((dad->children)[1]->code);
+
+                    // gen=to_string((dad->children)[1]->T)+" : ";
                     // dad->code.append(gen);
 
-                    dad->code.append("\n");
-                    gen=to_string((dad->children)[1]->F)+" : ";
-                    dad->code.append(gen);
+
+                    // dad->code.append((dad->children)[3]->code);
+
+                    // gen=" goto1 "+to_string(dad->next);
+                    // dad->code.append(gen);
 
                     // dad->code.append("\n");
-                    dad->code.append((dad->children)[5]->code);
+                    // gen=to_string((dad->children)[1]->F)+" : ";
+                    // dad->code.append(gen);
+
+                    // dad->code.append("\n");
+                    // dad->code.append((dad->children)[5]->code);
                     break;
                 case 8://S -> while C do S
-                    dad->begin=label;
-                    label++;
-                    dad->T=label;
-                    label++;
-                    (dad->children)[1]->F=dad->next;
+                    // dad->begin=label;
+                    // label++;
+                    // dad->T=label;
+                    // label++;
+                    // (dad->children)[1]->F=dad->next;
 
                     // dad->code.append("\n");
-                    gen=to_string(dad->begin)+" : ";
-                    dad->code.append(gen);
+                    // gen=to_string(dad->begin)+" : ";
+                    // dad->code.append(gen);
 
-                    dad->code.append((dad->children)[1]->code);
+                    // dad->code.append((dad->children)[1]->code);
+
+                    // // dad->code.append("\n");
+                    // gen=to_string((dad->children)[1]->T)+" : ";
+                    // dad->code.append(gen);
+
+                    // dad->code.append((dad->children)[3]->code);
 
                     // dad->code.append("\n");
-                    gen=to_string((dad->children)[1]->T)+" : ";
-                    dad->code.append(gen);
-
-                    dad->code.append((dad->children)[3]->code);
-
-                    dad->code.append("\n");
-                    gen=" goto "+to_string(dad->begin);
-                    dad->code.append(gen);
+                    // gen=" goto "+to_string(dad->begin);
+                    // dad->code.append(gen);
                     break;
                 case 9://C -> E > E
                     dad->code.append("if ");
                     for(TreeNode* tn:dad->children){
-                        // if(tn->code=="") continue;
                         if(tn->code!=""){
                             dad->code.append(tn->code);
                         }else{
                             dad->code.append(tn->places);
                         }
                     }
-                    dad->code.append(" goto2 "+to_string(dad->T));
-                    dad->code.append("\n");
-                    dad->code.append("goto3 "+to_string(dad->F));
+                    // dad->code.append(" goto2 "+to_string(dad->T));
+                    // dad->code.append("\n");
+                    // dad->code.append("goto3 "+to_string(dad->F));
                     break;
                 case 10://C -> E >= E
                     dad->code.append("if ");
 
                     for(TreeNode* tn:dad->children){
-                        // if(tn->code=="") continue;
                         dad->code.append("!");
                         if(tn->code!=""){
                             dad->code.append(tn->code);
@@ -647,9 +637,9 @@ bool PredictTable_LR::analyse(deque<symbolTableNode> toSyn){
                             dad->code.append(tn->places);
                         }
                     }
-                    dad->code.append(" goto "+to_string(dad->T));
-                    dad->code.append("\n");
-                    dad->code.append("goto "+to_string(dad->F));
+                    // dad->code.append(" goto "+to_string(dad->T));
+                    // dad->code.append("\n");
+                    // dad->code.append("goto "+to_string(dad->F));
                     break;
                 case 11://C -> E < E
                     dad->code+="if ";
@@ -660,12 +650,12 @@ bool PredictTable_LR::analyse(deque<symbolTableNode> toSyn){
                             dad->code.append(tn->places);
                         }
                     }
-                    dad->code.append(" goto "+to_string(dad->T));
-                    dad->code.append("\n");
-                    dad->code.append("goto "+to_string(dad->F));
+                    // dad->code.append(" goto "+to_string(dad->T));
+                    // dad->code.append("\n");
+                    // dad->code.append("goto "+to_string(dad->F));
                     break;
                 case 12://C -> E = E
-                dad->code+="if ";
+                    dad->code+="if ";
                     for(TreeNode* tn:dad->children){
                         if(tn->code!=""){
                             dad->code.append(tn->code);
@@ -673,9 +663,9 @@ bool PredictTable_LR::analyse(deque<symbolTableNode> toSyn){
                             dad->code.append(tn->places);
                         }
                     }
-                    dad->code.append(" goto "+to_string(dad->T));
-                    dad->code.append("\n");
-                    dad->code.append("goto "+to_string(dad->F));
+                //     dad->code.append(" goto "+to_string(dad->T));
+                //     dad->code.append("\n");
+                //     dad->code.append("goto "+to_string(dad->F));
                     break;
                 case 13://C -> E <= E
                 dad->code+="if ";
@@ -686,12 +676,12 @@ bool PredictTable_LR::analyse(deque<symbolTableNode> toSyn){
                             dad->code.append(tn->places);
                         }
                     }
-                    dad->code.append(" goto "+to_string(dad->T));
-                    dad->code.append("\n");
-                    dad->code.append("goto "+to_string(dad->F));
+                    // dad->code.append(" goto "+to_string(dad->T));
+                    // dad->code.append("\n");
+                    // dad->code.append("goto "+to_string(dad->F));
                     break;
                 case 14://C -> E <> E
-                dad->code+="if ";
+                    dad->code+="if ";
                     for(TreeNode* tn:dad->children){
                         dad->code.append("!");
                         if(tn->code!=""){
@@ -700,11 +690,10 @@ bool PredictTable_LR::analyse(deque<symbolTableNode> toSyn){
                             dad->code.append(tn->places);
                         }
                     }
-                    dad->code.append(" goto "+to_string(dad->T));
-                    // gen="if "+(dad->children)[0]->places+" > "+((dad->children)[2]->places)+" goto "+to_string(dad->T);
-                    // dad->code.append(gen);
+                    // dad->code.append(" goto "+to_string(dad->T));
+
                     // dad->code.append("\n");
-                    dad->code.append("goto "+to_string(dad->F));
+                    // dad->code.append("goto "+to_string(dad->F));
                     break;
                 case 15://E -> T E'
                     for(TreeNode* tn:dad->children){
@@ -717,7 +706,6 @@ bool PredictTable_LR::analyse(deque<symbolTableNode> toSyn){
                     }
                     break;
                 case 16://E' -> + T E'
-                    // dad->code.append("+");
 
                     for(TreeNode* tn:dad->children){
                         dad->code.append("!");
@@ -729,7 +717,6 @@ bool PredictTable_LR::analyse(deque<symbolTableNode> toSyn){
                     }
                     break;
                 case 17://E' -> - T E'
-                    // dad->code.append("-");
                     for(TreeNode* tn:dad->children){
                         dad->code.append("!");
                         if(tn->code!=""){
@@ -743,17 +730,16 @@ bool PredictTable_LR::analyse(deque<symbolTableNode> toSyn){
                     dad->code.clear();
                     break;
                 case 19://T -> F T'
-                    dad->code.append(dad->children[0]->places);
-                    if(dad->children[1]->code!=""){
-                        dad->code.append(dad->children[0]->code);
+                    for(TreeNode* tn:dad->children){
+                        dad->code.append("!");
+                        if(tn->code!=""){
+                            dad->code.append(tn->code);
+                        }else{
+                            dad->code.append(tn->places);
+                        }
                     }
-                    // for(TreeNode* tn:dad->children){
-                    //     dad->code.append("\n");
-                    //     dad->code.append(tn->code);
-                    // }
                     break;
                 case 20://T' -> * F T'
-                    // dad->code.append("*");
                     for(TreeNode* tn:dad->children){
                         dad->code.append("!");
                         if(tn->code!=""){
@@ -764,25 +750,27 @@ bool PredictTable_LR::analyse(deque<symbolTableNode> toSyn){
                     }
                     break;
                 case 21://T' -> / F T'
-                    // dad->code.append("/");
-                    dad->code.append(dad->children[1]->places);
-                    if(dad->children[2]->code!="") dad->code.append(dad->children[2]->code);
-                    // for(TreeNode* tn:dad->children){
-                    //     dad->code.append("\n");
-                    //     dad->code.append(tn->code);
-                    // }
+                    for(TreeNode* tn:dad->children){
+                        dad->code.append("!");
+                        if(tn->code!=""){
+                            dad->code.append(tn->code);
+                        }else{
+                            dad->code.append(tn->places);
+                        }
+                    }
                     break;
                 case 22://T' -> ~
                     dad->code.clear();
                     break;
                 case 23://F -> ( E )
-                    // dad->code.append("(");
-                    dad->code.append(dad->children[1]->code);
-                    // for(TreeNode* tn:dad->children){
-                    //     dad->code.append("\n");
-                    //     dad->code.append(tn->code);
-                    // }
-                    dad->code.append(")");
+                    for(TreeNode* tn:dad->children){
+                        dad->code.append("!");
+                        if(tn->code!=""){
+                            dad->code.append(tn->code);
+                        }else{
+                            dad->code.append(tn->places);
+                        }
+                    }
                     break;
                 case 24://F -> id
                     dad->places=dad->children[0]->places;
@@ -831,12 +819,554 @@ bool PredictTable_LR::analyse(deque<symbolTableNode> toSyn){
                  << " ";
             cout << "successfully accept!" << endl;
 
-            for(int ii=0;ii<st_tree.size();ii++){
+            // for(int ii=0;ii<st_tree.size();ii++){
                 TreeNode *t=st_tree.top();
+                // stack<TreeNode*> stt;
+                deque<TreeNode*> stt;
+                stt.push_back(t);
+                int label=0;
+                while(!stt.empty()){
+                    TreeNode* ttop=stt.back();
+                    string gen="";
+                    // cout<<"doing "<<ttop->syntaxType<<" pro"<<ttop->proId<<" time:"<<ttop->time;
+                    if(ttop->time==0){//从上往下继承
+                        // if(ttop->proId+1==7) cout<<"this is S!!"<<endl;
+                        switch (ttop->proId+1){
+                            case 1://P' -> P
+                                // for(TreeNode* tn:ttop->children){
+                                //     ttop->code.append("!");
+                                //     if(tn->code!=""){
+                                //         ttop->code.append(tn->code);
+                                //     }else{
+                                //         ttop->code.append(tn->places);
+                                //     }
+                                // }
+                                break;
+                            case 2://P -> L
+                                if(ttop->begin!=-1){
+                                    ttop->children[0]->begin=ttop->begin;
+                                }
+                                // for(TreeNode* tn:ttop->children){
+                                //     // 
+                                //     ttop->code.append("!");
+                                //     if(tn->code!=""){
+                                //         ttop->code.append(tn->code);
+                                //     }else{
+                                //         ttop->code.append(tn->places);
+                                //     }
+                                // }
+                                break;
+                            case 3://P -> L P
+                                if(ttop->begin!=-1){
+                                    ttop->children[0]->begin=ttop->begin;
+                                }
+                                // ttop->children[1]->begin=ttop->next;
+                                // for(TreeNode* tn:ttop->children){
+                                //     ttop->code.append("!");
+                                //     if(tn->code!=""){
+                                //         ttop->code.append(tn->code);
+                                //     }else{
+                                //         ttop->code.append(tn->places);
+                                //     }
+                                // }
+                                break;
+                            case 4://L -> S ;
+                                // L->next=
+                                // for(TreeNode* tn:ttop->children){
+                                //     ttop->code.append("!");
+                                //     if(tn->code!=""){
+                                //         ttop->code.append(tn->code);
+                                //     }else{
+                                //         ttop->code.append(tn->places);
+                                //     }
+                                // }
+                                break;
+                            case 5://S -> id = E
+                                // gen=((ttop->children)[0]->places)+" := ";
+                                // if(((ttop->children)[2]->code!="")){
+                                //     gen+=((ttop->children)[2]->code);
+                                // }else{
+                                //     gen+=((ttop->children)[2]->places);
+                                // }
+                                // ttop->code.append(gen);
+                                break;
+                            case 6://S -> if C then S
+                                ttop->next=label;
+                                label++;
+                                ttop->children[1]->T=label;
+                                label++;
+
+                                (ttop->children)[1]->F=ttop->next;
+                                (ttop->children)[3]->next=ttop->next;
+
+                                // ttop->code.append((ttop->children)[1]->code);
+                                
+                                // ttop->code.append("\n");
+                                // gen=to_string((ttop->children)[1]->T)+" : ";
+                                // ttop->code.append(gen);
+                                
+                                // ttop->code.append((ttop->children)[3]->code);
+                                break;
+                            case 7://S -> if C then S else S
+                                ttop->next=label;
+                                label++;
+                                ttop->children[1]->T=label;
+                                label++;
+                                ttop->children[1]->F=label;
+                                label++;
+
+                                (ttop->children)[1]->next=ttop->next;
+                                (ttop->children)[3]->next=(ttop->children)[1]->next;
+
+                                // ttop->code.append("\n");
+                                // ttop->code.append((ttop->children)[1]->code);
+                                // cout<<"appending S1: "<<ttop->code<<endl;
+
+                                // gen=to_string((ttop->children)[1]->T)+" : ";
+                                // ttop->code.append(gen);
+
+
+                                // ttop->code.append((ttop->children)[3]->code);
+
+                                // gen=" goto1 "+to_string(ttop->next);
+                                // ttop->code.append(gen);
+
+                                // ttop->code.append("\n");
+                                // gen=to_string((ttop->children)[1]->F)+" : ";
+                                // ttop->code.append(gen);
+
+                                // ttop->code.append("\n");
+                                // ttop->code.append((ttop->children)[5]->code);
+                                break;
+                            case 8://S -> while C do S
+                                ttop->next=label;
+                                label++;
+                                ttop->begin=label;
+                                label++;
+                                (ttop->children)[1]->T=label;
+                                label++;
+                                (ttop->children)[1]->F=ttop->next;
+                                (ttop->children)[3]->next=ttop->begin;
+                                break;
+                            case 9://C -> E > E
+                                break;
+                            case 10://C -> E >= E
+                                break;
+                            case 11://C -> E < E
+                                break;
+                            case 12://C -> E = E
+                                break;
+                            case 13://C -> E <= E
+                                break;
+                            case 14://C -> E <> E
+                                break;
+                            case 15://E -> T E'
+                                break;
+                            case 16://E' -> + T E'
+
+                                // for(TreeNode* tn:ttop->children){
+                                //     ttop->code.append("!");
+                                //     if(tn->code!=""){
+                                //         ttop->code.append(tn->code);
+                                //     }else{
+                                //         ttop->code.append(tn->places);
+                                //     }
+                                // }
+                                break;
+                            case 17://E' -> - T E'
+                                // for(TreeNode* tn:ttop->children){
+                                //     ttop->code.append("!");
+                                //     if(tn->code!=""){
+                                //         ttop->code.append(tn->code);
+                                //     }else{
+                                //         ttop->code.append(tn->places);
+                                //     }
+                                // }
+                                break;
+                            case 18://E' -> ~
+                                // ttop->code.clear();
+                                break;
+                            case 19://T -> F T'
+                                // ttop->code.append(ttop->children[0]->places);
+                                // if(ttop->children[1]->code!=""){
+                                //     ttop->code.append(ttop->children[1]->code);
+                                // }else{
+                                //     ttop->code.append(ttop->children[1]->places);
+                                // }
+                                break;
+                            case 20://T' -> * F T'
+                                // for(TreeNode* tn:ttop->children){
+                                //     ttop->code.append("!");
+                                //     if(tn->code!=""){
+                                //         ttop->code.append(tn->code);
+                                //     }else{
+                                //         ttop->code.append(tn->places);
+                                //     }
+                                // }
+                                break;
+                            case 21://T' -> / F T'
+                                // ttop->code.append(ttop->children[1]->places);
+                                // if(ttop->children[2]->code!=""){ 
+                                //     ttop->code.append(ttop->children[2]->code);
+                                // }else{
+                                //     ttop->code.append(ttop->children[2]->places);
+                                // }
+                                break;
+                            case 22://T' -> ~
+                                // ttop->code.clear();
+                                break;
+                            case 23://F -> ( E )
+                                // ttop->code.append("(");
+                                // ttop->code.append(ttop->children[1]->code);
+                                // // for(TreeNode* tn:ttop->children){
+                                // //     ttop->code.append("\n");
+                                // //     ttop->code.append(tn->code);
+                                // // }
+                                // ttop->code.append(")");
+                                break;
+                            case 24://F -> id
+                                // ttop->places=ttop->children[0]->places;
+                                // ttop->code="";
+                                break;
+                            case 25://F -> int8
+                                // ttop->places=ttop->children[0]->places;
+                                // ttop->code="";
+                                break;
+                            case 26://F -> int10
+                                // ttop->places=ttop->children[0]->places;
+                                // ttop->code="";
+                                break;
+                            case 27://F -> int16
+                                // ttop->places=ttop->children[0]->places;
+                                // ttop->code="";
+                                break;
+                            default:
+                                break;
+                        }
+                        ttop->time+=1;
+                    }else if(ttop->time==1){//从下往上
+                        switch (ttop->proId+1){
+                            case 1://P' -> P
+                                for(TreeNode* tn:ttop->children){
+                                    ttop->code.append("!");
+                                    if(tn->code!=""){
+                                        ttop->code.append(tn->code);
+                                    }else{
+                                        ttop->code.append(tn->places);
+                                    }
+                                }
+                                break;
+                            case 2://P -> L
+                                for(TreeNode* tn:ttop->children){
+                                    // 
+                                    ttop->code.append("!");
+                                    if(tn->code!=""){
+                                        ttop->code.append(tn->code);
+                                    }else{
+                                        ttop->code.append(tn->places);
+                                    }
+                                }
+                                break;
+                            case 3://P -> L P
+                                // ttop->next=ttop->children[0]->next;
+                                for(TreeNode* tn:ttop->children){
+                                    ttop->code.append("!");
+                                    if(tn->code!=""){
+                                        ttop->code.append(tn->code);
+                                    }else{
+                                        ttop->code.append(tn->places);
+                                    }
+                                }
+                                break;
+                            case 4://L -> S ;
+                                // ttop->next=ttop->children[0]->next;
+                                if(ttop->children[0]->code!=""){
+                                        ttop->code.append(ttop->children[0]->code);
+                                    }else{
+                                        ttop->code.append(ttop->children[0]->places);
+                                    }
+                                break;
+                            case 5://S -> id = E
+                                // if(ttop->begin!=-1){
+                                //     ttop->code.append(to_string(ttop->begin));
+                                //     ttop->code+=" :";
+                                // }
+                                gen=((ttop->children)[0]->places)+" := ";
+                                if(((ttop->children)[2]->code!="")){
+                                    gen+=((ttop->children)[2]->code);
+                                }else{
+                                    gen+=((ttop->children)[2]->places);
+                                }
+                                ttop->code.append(gen);
+                                break;
+                            case 6://S -> if C then S
+                                // ttop->next=label;
+                                // label++;
+                                // ttop->children[1]->T=label;
+                                // label++;
+
+                                // (ttop->children)[1]->F=ttop->next;
+                                // (ttop->children)[3]->next=ttop->next;
+
+                                ttop->code.append((ttop->children)[1]->code);
+                                
+                                ttop->code.append("\n");
+                                gen=to_string((ttop->children)[1]->T)+" : ";
+                                ttop->code.append(gen);
+                                
+                                ttop->code.append((ttop->children)[3]->code);
+                                break;
+                            case 7://S -> if C then S else S
+                                // ttop->next=label;
+                                // label++;
+                                // ttop->children[1]->T=label;
+                                // label++;
+                                // ttop->children[1]->F=label;
+                                // label++;
+
+                                // (ttop->children)[1]->next=ttop->next;
+                                // // (ttop->children)[1]->T=
+                                // (ttop->children)[3]->next=(ttop->children)[1]->next;
+
+                                ttop->code.append("\n");
+                                ttop->code.append((ttop->children)[1]->code);
+                                // cout<<"appending S2: "<<ttop->code<<endl;
+
+                                gen=to_string((ttop->children)[1]->T)+" : ";
+                                ttop->code.append(gen);
+
+
+                                ttop->code.append((ttop->children)[3]->code);
+
+                                gen=" goto "+to_string(ttop->next);
+                                ttop->code.append(gen);
+
+                                ttop->code.append("\n");
+                                gen=to_string((ttop->children)[1]->F)+" : ";
+                                ttop->code.append(gen);
+
+                                // ttop->code.append("\n");
+                                ttop->code.append((ttop->children)[5]->code);
+                                ttop->code.append("\n");
+                                break;
+                            case 8://S -> while C do S
+                                // ttop->next=label;
+                                // label++;
+                                // ttop->begin=label;
+                                // label++;
+                                // ttop->T=label;
+                                // label++;
+                                // (ttop->children)[1]->F=ttop->next;
+
+                                ttop->code.append("\n");
+                                gen=to_string(ttop->begin)+" : ";
+                                ttop->code.append(gen);
+
+                                ttop->code.append((ttop->children)[1]->code);
+
+                                // ttop->code.append("\n");
+                                gen=to_string((ttop->children)[1]->T)+" : ";
+                                ttop->code.append(gen);
+
+                                ttop->code.append((ttop->children)[3]->code);
+
+                                ttop->code.append("\n");
+                                gen=" goto "+to_string(ttop->begin);
+                                ttop->code.append(gen);
+                                ttop->code.append("\n");
+                                break;
+                            case 9://C -> E > E
+                                // ttop->code.append("if ");
+                                // for(TreeNode* tn:ttop->children){
+                                //     if(tn->code!=""){
+                                //         ttop->code.append(tn->code);
+                                //     }else{
+                                //         ttop->code.append(tn->places);
+                                //     }
+                                // }
+                                ttop->code.append("goto "+to_string(ttop->T));
+                                ttop->code.append("\n");
+                                ttop->code.append("goto "+to_string(ttop->F));
+                                ttop->code.append("\n");
+                                break;
+                            case 10://C -> E >= E
+                                // ttop->code.append("if ");
+
+                                // for(TreeNode* tn:ttop->children){
+                                //     ttop->code.append("!");
+                                //     if(tn->code!=""){
+                                //         ttop->code.append(tn->code);
+                                //     }else{
+                                //         ttop->code.append(tn->places);
+                                //     }
+                                // }
+                                ttop->code.append(" goto "+to_string(ttop->T));
+                                ttop->code.append("\n");
+                                ttop->code.append("goto "+to_string(ttop->F));
+                                ttop->code.append("\n");
+                                break;
+                            case 11://C -> E < E
+                                // ttop->code+="if ";
+                                // for(TreeNode* tn:ttop->children){
+                                //     if(tn->code!=""){
+                                //         ttop->code.append(tn->code);
+                                //     }else{
+                                //         ttop->code.append(tn->places);
+                                //     }
+                                // }
+                                ttop->code.append(" goto "+to_string(ttop->T));
+                                ttop->code.append("\n");
+                                ttop->code.append("goto "+to_string(ttop->F));
+                                ttop->code.append("\n");
+                                break;
+                            case 12://C -> E = E
+                                // ttop->code+="if ";
+                                // for(TreeNode* tn:ttop->children){
+                                //     if(tn->code!=""){
+                                //         ttop->code.append(tn->code);
+                                //     }else{
+                                //         ttop->code.append(tn->places);
+                                //     }
+                                // }
+                                ttop->code.append(" goto "+to_string(ttop->T));
+                                ttop->code.append("\n");
+                                ttop->code.append("goto "+to_string(ttop->F));
+                                ttop->code.append("\n");
+                                break;
+                            case 13://C -> E <= E
+                            // ttop->code+="if ";
+                            //     for(TreeNode* tn:ttop->children){
+                            //         if(tn->code!=""){
+                            //             ttop->code.append(tn->code);
+                            //         }else{
+                            //             ttop->code.append(tn->places);
+                            //         }
+                            //     }
+                                ttop->code.append(" goto "+to_string(ttop->T));
+                                ttop->code.append("\n");
+                                ttop->code.append("goto "+to_string(ttop->F));
+                                ttop->code.append("\n");
+                                break;
+                            case 14://C -> E <> E
+                            // ttop->code+="if ";
+                            //     for(TreeNode* tn:ttop->children){
+                            //         ttop->code.append("!");
+                            //         if(tn->code!=""){
+                            //             ttop->code.append(tn->code);
+                            //         }else{
+                            //             ttop->code.append(tn->places);
+                            //         }
+                            //     }
+                                ttop->code.append(" goto "+to_string(ttop->T));
+
+                                ttop->code.append("\n");
+                                ttop->code.append("goto "+to_string(ttop->F));
+                                break;
+                            case 15://E -> T E'
+                                // for(TreeNode* tn:ttop->children){
+                                //     ttop->code.append("!");
+                                //     if(tn->code!=""){
+                                //         ttop->code.append(tn->code);
+                                //     }else{
+                                //         ttop->code.append(tn->places);
+                                //     }
+                                // }
+                                break;
+                            case 16://E' -> + T E'
+
+                                // for(TreeNode* tn:ttop->children){
+                                //     ttop->code.append("!");
+                                //     if(tn->code!=""){
+                                //         ttop->code.append(tn->code);
+                                //     }else{
+                                //         ttop->code.append(tn->places);
+                                //     }
+                                // }
+                                break;
+                            case 17://E' -> - T E'
+                                // for(TreeNode* tn:ttop->children){
+                                //     ttop->code.append("!");
+                                //     if(tn->code!=""){
+                                //         ttop->code.append(tn->code);
+                                //     }else{
+                                //         ttop->code.append(tn->places);
+                                //     }
+                                // }
+                                break;
+                            case 18://E' -> ~
+                                // ttop->code.clear();
+                                break;
+                            case 19://T -> F T'
+                                // ttop->code.append(ttop->children[0]->places);
+                                // if(ttop->children[1]->code!=""){
+                                //     ttop->code.append(ttop->children[1]->code);
+                                // }else{
+                                //     ttop->code.append(ttop->children[1]->places);
+                                // }
+                                break;
+                            case 20://T' -> * F T'
+                                // for(TreeNode* tn:ttop->children){
+                                //     ttop->code.append("!");
+                                //     if(tn->code!=""){
+                                //         ttop->code.append(tn->code);
+                                //     }else{
+                                //         ttop->code.append(tn->places);
+                                //     }
+                                // }
+                                break;
+                            case 21://T' -> / F T'
+                                // ttop->code.append(ttop->children[1]->places);
+                                // if(ttop->children[2]->code!=""){ 
+                                //     ttop->code.append(ttop->children[2]->code);
+                                // }else{
+                                //     ttop->code.append(ttop->children[2]->places);
+                                // }
+                                break;
+                            case 22://T' -> ~
+                                // ttop->code.clear();
+                                break;
+                            case 23://F -> ( E )
+                                // ttop->code.append("(");
+                                // ttop->code.append(ttop->children[1]->code);
+                                // // for(TreeNode* tn:ttop->children){
+                                // //     ttop->code.append("\n");
+                                // //     ttop->code.append(tn->code);
+                                // // }
+                                // ttop->code.append(")");
+                                break;
+                            case 24://F -> id
+                                // ttop->places=ttop->children[0]->places;
+                                // ttop->code="";
+                                break;
+                            case 25://F -> int8
+                                // ttop->places=ttop->children[0]->places;
+                                // ttop->code="";
+                                break;
+                            case 26://F -> int10
+                                // ttop->places=ttop->children[0]->places;
+                                // ttop->code="";
+                                break;
+                            case 27://F -> int16
+                                // ttop->places=ttop->children[0]->places;
+                                // ttop->code="";
+                                break;
+                            default:
+                                break;
+                        }
+                        stt.pop_back();
+                        ttop->time+=1;
+                    }
+                    if(ttop->time==1&&ttop->children.size()!=0){
+                        for(TreeNode* kid:ttop->children){
+                            stt.push_back(kid);
+                        }
+                    }
+                    
+                }
                 printTree(t);
                 st_tree.pop();
                 cout<<"next"<<endl;
-            }
+            // }
             
             // cout << "------------+--------+----+";
             // cout << "-------------------------------------+-----------" << endl;

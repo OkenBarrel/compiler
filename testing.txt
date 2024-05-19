@@ -1,13 +1,9 @@
 if 
 IDN a
-GT >
+LE <=
 DEC 0
 then 
 IDN a
 EQ =
-DEC 0
-else 
-IDN a
-EQ =
-DEC 5
+DEC 1
 SEMI ;
