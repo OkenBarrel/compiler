@@ -240,5 +240,5 @@ public:
     //重载<<输出分析表
     friend ostream &operator<<(ostream &os, PredictTable_LR &lrtable);
     //分析串
-    bool analyse(string path);
+    bool analyse(string path,deque<symbolTableNode> tosyn);
 };

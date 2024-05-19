@@ -1,4 +1,5 @@
 #include "syntax_anl.h"
+#include "../lab1/lexi_anl.h"
 #include <fstream>
 
 // void doThis(int proId,){
@@ -316,7 +317,7 @@ unordered_set<string> PredictTable_LR::getGotoHeader()
     return gotoheader;
 }
 
-bool PredictTable_LR::analyse(string path){
+bool PredictTable_LR::analyse(string path,deque<symbolTableNode> toSyn){
     vector<string> l;
     vector<TreeNode*> ll;
     string str;
