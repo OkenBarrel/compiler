@@ -72,6 +72,9 @@ std::deque<symbolTableNode> lexi(string path){
                 res=scan_digit(in,&error);
                 if(!error){
                     f<<res.toString()<<std::endl;
+                    if(res.typeCode==1||res.typeCode==3||res.typeCode==5){
+                        break;
+                    }
                     toSyn.push_back(res);
                 }
                 break;

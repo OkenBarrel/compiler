@@ -136,17 +136,20 @@ symbolTableNode scan_digit(std::string in,int* error){
         }else if(state==9){
             t="ILOCT";
             code=ILOCT;
+            std::cout<<"error: ILOCT"<<std::endl;
             break;
             // return ILOCT;
         }
         else if(state==10){
             t="ILHEX";
             code=ILHEX;
+            std::cout<<"error: ILHEX"<<std::endl;
             break;
             // return ILHEX;
         }else if(state==11){
-            t="ILDEX";
+            t="ILDEC";
             code=ILDEC;
+            std::cout<<"error: ILDEC"<<std::endl;
             break;
             // return ILDEC;
         }
@@ -253,7 +256,9 @@ symbolTableNode scan_else(std::string in,int* error){
         }else{
             t="ERROR SYMBOL:";
             code=ERROR;
-            std::cout<<"error6"<<std::endl;
+            if(in!=""){
+                std::cout<<"error: unknown symbol"<<std::endl;
+            }   
             *error=1;
         }
     }else if(in.length()==2){
@@ -269,13 +274,17 @@ symbolTableNode scan_else(std::string in,int* error){
         }else{
             t="ERROR SYMBOL:";
             code=ERROR;
-            std::cout<<"error6"<<std::endl;
+            if(in!=""){
+                std::cout<<"error: unknown symbol"<<std::endl;
+            }
             *error=1;    
         }
     }else{
         t="ERROR SYMBOL:";
         code=ERROR;
-        std::cout<<"error6"<<std::endl;
+        if(in!=""){
+            std::cout<<"error: unknown symbol"<<std::endl;
+        }   
         *error=1;
     }
     symbolTableNode res=symbolTableNode(t,code,in);
