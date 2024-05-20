@@ -37,6 +37,7 @@
 *.drawio
 *.png
 *.jpeg
+!report.docx
 
 # ide setting
 .idea/

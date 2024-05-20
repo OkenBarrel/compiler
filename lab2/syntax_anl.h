@@ -39,6 +39,7 @@ struct TreeNode{
         code="";
         proId=pro;
         time=0;
+        T=F=begin=next=-1;
         // father=father;
     }
     TreeNode(string syn,string ps){
@@ -74,7 +75,7 @@ struct TreeNode{
     //     switch (proId){
     //             case 1://P' -> P
     //                 for(TreeNode* tn:father->children){
-    //                     father->code.append("!");
+    //                     father->code.append("");
     //                     if(tn->code!=""){
     //                         father->code.append(tn->code);
     //                     }else{
@@ -85,7 +86,7 @@ struct TreeNode{
     //             case 2://P -> L
     //                 for(TreeNode* tn:father->children){
     //                     // 
-    //                     father->code.append("!");
+    //                     father->code.append("");
     //                     if(tn->code!=""){
     //                         father->code.append(tn->code);
     //                     }else{
@@ -95,7 +96,7 @@ struct TreeNode{
     //                 break;
     //             case 3://P -> L P
     //                 for(TreeNode* tn:father->children){
-    //                     father->code.append("!");
+    //                     father->code.append("");
     //                     if(tn->code!=""){
     //                         father->code.append(tn->code);
     //                     }else{
@@ -105,7 +106,7 @@ struct TreeNode{
     //                 break;
     //             case 4://L -> S ;
     //                 for(TreeNode* tn:father->children){
-    //                     father->code.append("!");
+    //                     father->code.append("");
     //                     if(tn->code!=""){
     //                         father->code.append(tn->code);
     //                     }else{
@@ -218,7 +219,7 @@ struct TreeNode{
 
     //                 for(TreeNode* tn:father->children){
     //                     // if(tn->code=="") continue;
-    //                     father->code.append("!");
+    //                     father->code.append("");
     //                     if(tn->code!=""){
     //                         father->code.append(tn->code);
     //                     }else{
@@ -271,7 +272,7 @@ struct TreeNode{
     //             case 14://C -> E <> E
     //             father->code+="if ";
     //                 for(TreeNode* tn:father->children){
-    //                     father->code.append("!");
+    //                     father->code.append("");
     //                     if(tn->code!=""){
     //                         father->code.append(tn->code);
     //                     }else{
@@ -286,7 +287,7 @@ struct TreeNode{
     //                 break;
     //             case 15://E -> T E'
     //                 for(TreeNode* tn:father->children){
-    //                     father->code.append("!");
+    //                     father->code.append("");
     //                     if(tn->code!=""){
     //                         father->code.append(tn->code);
     //                     }else{
@@ -298,7 +299,7 @@ struct TreeNode{
     //                 // father->code.append("+");
 
     //                 for(TreeNode* tn:father->children){
-    //                     father->code.append("!");
+    //                     father->code.append("");
     //                     if(tn->code!=""){
     //                         father->code.append(tn->code);
     //                     }else{
@@ -309,7 +310,7 @@ struct TreeNode{
     //             case 17://E' -> - T E'
     //                 // father->code.append("-");
     //                 for(TreeNode* tn:father->children){
-    //                     father->code.append("!");
+    //                     father->code.append("");
     //                     if(tn->code!=""){
     //                         father->code.append(tn->code);
     //                     }else{
@@ -335,7 +336,7 @@ struct TreeNode{
     //             case 20://T' -> * F T'
     //                 // father->code.append("*");
     //                 for(TreeNode* tn:father->children){
-    //                     father->code.append("!");
+    //                     father->code.append("");
     //                     if(tn->code!=""){
     //                         father->code.append(tn->code);
     //                     }else{
