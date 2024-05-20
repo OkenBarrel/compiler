@@ -39,6 +39,7 @@ struct TreeNode{
         code="";
         proId=pro;
         time=0;
+        T=F=begin=next=-1;
         // father=father;
     }
     TreeNode(string syn,string ps){

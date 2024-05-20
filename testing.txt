@@ -1,9 +1,35 @@
+while 
+SLP (
+IDN a3
+ADD +
+DEC 15
+SRP )
+GT >
+HEX 10
+do 
 if 
-IDN a
-LE <=
-DEC 0
-then 
-IDN a
+IDN x2
 EQ =
-DEC 1
+OCT 7
+then 
+while 
+IDN y
+LT <
+IDN z
+do 
+IDN y
+EQ =
+IDN x
+MUL *
+IDN y
+DIV /
+IDN z
+SEMI ;
+IDN c
+EQ =
+IDN b
+MUL *
+IDN c
+ADD +
+IDN d
 SEMI ;
