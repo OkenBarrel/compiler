@@ -706,9 +706,15 @@ bool PredictTable_LR::analyse(deque<symbolTableNode> toSyn){
                     }
                     break;
                 case 16://E' -> + T E'
+                    // dad->code.append("+");
+                    // if(dad->children[1]->code==""&&dad->children[0]->code==""){
 
+                    // }
                     for(TreeNode* tn:dad->children){
                         dad->code.append("!");
+                        // if(tn->places!=""){
+                        //     dad->code.append(tn->places);
+                        // }
                         if(tn->code!=""){
                             dad->code.append(tn->code);
                         }else{
@@ -719,9 +725,13 @@ bool PredictTable_LR::analyse(deque<symbolTableNode> toSyn){
                 case 17://E' -> - T E'
                     for(TreeNode* tn:dad->children){
                         dad->code.append("!");
+                        if(tn->places!=""){
+
+                        }
                         if(tn->code!=""){
                             dad->code.append(tn->code);
                         }else{
+                            // dad->place=
                             dad->code.append(tn->places);
                         }
                     }
@@ -731,6 +741,18 @@ bool PredictTable_LR::analyse(deque<symbolTableNode> toSyn){
                     dad->code.clear();
                     break;
                 case 19://T -> F T'
+                    // for(TreeNode* tn:dad->children){
+                    //     dad->code.append("!");
+                    //     dad->code.append(tn->places);
+                    //     // if(tn->code!=""){
+                    //     //     dad->code.append(tn->code);
+                    //     // }else{
+                    //     //     dad->code.append(tn->places);
+                    //     // }
+                    // }
+                    // if(dad->children[0]->code==""||dad->children[1]->code==""){
+                    //     dad->places=dad->places=
+                    // }
                     for(TreeNode* tn:dad->children){
                         dad->code.append("!");
                         if(tn->code!=""){
@@ -764,6 +786,7 @@ bool PredictTable_LR::analyse(deque<symbolTableNode> toSyn){
                     dad->code.clear();
                     break;
                 case 23://F -> ( E )
+
                     for(TreeNode* tn:dad->children){
                         dad->code.append("!");
                         if(tn->code!=""){
