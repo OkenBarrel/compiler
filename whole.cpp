@@ -13,7 +13,6 @@ using namespace std;
 
 int parsing(string proPath,std::deque<symbolTableNode> toSyn){
     CFG_LR1 lr1(proPath);
-    // cin >> lr1;
     cout << lr1;
     lr1.createItem();
     lr1.outPutItem();
@@ -107,12 +106,6 @@ std::deque<symbolTableNode> lexi(string path){
 int main(){
 
     std::deque<symbolTableNode> toSyn;
-    // int i=22;
-    // int *a=&i;
-    // int *y=a;
-    // cout<<i<<" "<<*a<<" "<<*y<<endl;
-    // i=33;
-    // cout<<i<<" "<<*a<<" "<<*y<<endl;
     toSyn=lexi("testing.txt");
     system("pause");
     parsing("lab2/production.txt",toSyn);

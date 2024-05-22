@@ -4,34 +4,7 @@
 #include <queue>
 #include "lexi_class.h"
 #include "lexi_anl.h"
-// enum TOKEN{
-//     DEC,
-//     ILDEC,
-//     OCT,
-//     ILOCT,
-//     HEX,
-//     ILHEX,
-//     IDN,//6
-//     ADD,
-//     SUB,
-//     MUL,
-//     DIV,
-//     GT,
-//     LT,
-//     EQ,
-//     GE,
-//     LE,
-//     NEQ,
-//     SLP,
-//     SRP,
-//     SEMI,
-//     FUNC,
-//     ERROR
-// };
 
-void hello(){
-    std::cout<<"heeeeellooooo!!"<<std::endl;
-}
 symbolTableNode scan_digit(std::string in,int* error){
     int state=0;
     int i=0;
@@ -86,7 +59,6 @@ symbolTableNode scan_digit(std::string in,int* error){
             code=DEC;
             prop=std::stoi(in.substr(0,i));
             break;
-            // return DEC;
         }else if(state==4){
             
             if(i==in.size()){
@@ -114,7 +86,6 @@ symbolTableNode scan_digit(std::string in,int* error){
             code=OCT;
             prop=std::stoi(in.substr(0,i),0,8);
             break;
-            // return OCT;
         }
         else if(state==7){
             if(i==in.size()){
@@ -131,27 +102,22 @@ symbolTableNode scan_digit(std::string in,int* error){
             code=HEX;
             prop=std::stoi(in.substr(0,i),0,16);
             break;
-            // return OCT;
-            // return HEX;
         }else if(state==9){
             t="ILOCT";
             code=ILOCT;
             std::cout<<"error: ILOCT"<<std::endl;
             break;
-            // return ILOCT;
         }
         else if(state==10){
             t="ILHEX";
             code=ILHEX;
             std::cout<<"error: ILHEX"<<std::endl;
             break;
-            // return ILHEX;
         }else if(state==11){
             t="ILDEC";
             code=ILDEC;
             std::cout<<"error: ILDEC"<<std::endl;
             break;
-            // return ILDEC;
         }
     }
     symbolTableNode res=symbolTableNode(t,code,prop);

@@ -1,9 +1,6 @@
-// #include <bits/stdc++.h>
 #include <iostream>
 #include <string>
 #include "syntax_anl.h"
-// #include<storagewmi_provider.mof>
-// #include<deque>
 
 using namespace std;
 

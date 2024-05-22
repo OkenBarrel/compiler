@@ -23,12 +23,6 @@ bool inMap(map<int,set<item>>itemSet,set<item> item){
         }
         if(notFoundFlag==0) continue;
         else return true;
-        // while(setit!=it.second.end()||itemit!=item.end()){
-        //     // if(setit!=it.second.end()^itemit!=item.end()) return false;
-        //     if(((*setit)==(*itemit))==false) return false;
-        //     setit++;
-        //     itemit++;
-        // }
     }
     return false;
 }
@@ -93,10 +87,7 @@ CFG_LR1::CFG_LR1(string path){
     infile >> s;
     setStartSymbol(s);
     infile.close();
-    // return infile;
 }
-
-// CFG_LR1::~CFG_LR1(){}
 
 map<string,set<string>> CFG_LR1::getFollow(){
     return followSet;
@@ -111,7 +102,6 @@ map<int, set<item>> CFG_LR1::getItemset(){
 }
 void CFG_LR1::getEmptySet(string s){
     unordered_set<int> trace;
-    // unordered_set<string> res;
     stack<string> lookup;
 
     for(auto pr:getProduction()){
@@ -132,30 +122,11 @@ void CFG_LR1::getEmptySet(string s){
             lookup.push(pr.second.left);
         }
     }
-    // lookup.push(s);
-    // while(!lookup.empty()){
-    //     string tsrget=lookup.top();
-    //     lookup.pop();
-    //     for(auto pr:getProduction()){
-    //         if(pr.second.left==s){
-    //             trace.insert(pr.first);
-    //             if(inVec(pr.second.right,"~")){
-    //                 return true;
-    //             }
-    //             for(string l :pr.second.right){
-    //                 if(isVN(l)){
-    //                     lookup.push(l);
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
 }
 void CFG_LR1::makeFollow(){
     set<string> f;
     int flag=0;
     bool changed;
-    // f.insert("#");
     for(auto i:getVN()){
         followSet[i]=f;
     }
@@ -190,18 +161,6 @@ void CFG_LR1::makeFollow(){
                         }
                     }
                 }
-                // string nextSym=pr.second.right[i+1];
-                // if((isVN(symbol) && i==pr.second.right.size()-1||firstSet[nextSym].find("~")!=firstSet[nextSym].end())&&pr.second.left!=symbol){
-                //     insertSet(followSet[symbol],firstSet[pr.second.left]);
-                //     changed = true;
-                // }else if(isVN(symbol) && isVN(nextSym)){
-                //     insertSet(followSet[symbol],firstSet[nextSym]);
-                //     changed=true;
-                //     followSet[symbol].erase("~");
-                // }else if(isVN(symbol) && !isVN(nextSym)){
-                //     followSet[symbol].insert(nextSym);
-                //     changed=true;
-                // }
             }
         }
         if(!changed) break;
@@ -267,14 +226,6 @@ void CFG_LR1::makeFirst(){
         if (changeFlag == false)
             break;
     }
-    // for(auto mit:firstSet){
-    //     cout<<mit.first<<endl;
-    //     cout<<"first: ";
-    //     for(auto sit:mit.second){
-    //         cout<<string(sit)<<" ";
-    //     }
-    // }
-    // cout<<"\n"<<"first end"<<endl;
 }
 
 void CFG_LR1::createItem()
@@ -309,7 +260,6 @@ void CFG_LR1::createItem()
         }
     }
     Closure(beginist);
-    // cout<<"ending Closure 1"<<endl;
     if(inMap(itemset,beginist)==false){
         itemset[index] = beginist;
     }
@@ -317,17 +267,14 @@ void CFG_LR1::createItem()
     index++;
     while (!deal.empty()) //处理队列不空
     {
-        // cout<<"into while"<<endl;
         int num = deal.front();
         set<item> ist = itemset[num];
         //遍历符号
         for (auto v : sign)
         {
-            // cout<<"into for1"<<endl;
             set<item> st;
             for (auto it : ist)
             {
-                // cout<<"into for2"<<endl;
 
                 if (it.dot != -1) //未到末尾
                 {
@@ -341,9 +288,7 @@ void CFG_LR1::createItem()
                     }
                 }
             }
-            // cout<<"after for 2"<<endl;
             Closure(st);
-            // cout<<"after closure2"<<endl;
             if (!st.empty())
             {
                 int flag = -1;
@@ -418,18 +363,7 @@ void CFG_LR1::Closure(set<item> &ist)
         que.push(it);
     }
     while (!que.empty())
-    {
-        // cout<<"in closure while"<<endl;
-        // int cnt=0;
-        // int s=que.size();
-        // while(cnt<s){
-        //     item ii=que.front();
-        //     que.pop();
-        //     cout<<ii.pro.toString()<<" "<<ii.dot<<endl;
-        //     que.push(ii);
-        //     cnt++;
-        // }
-        item it = que.front();
+    {        item it = que.front();
         if (it.dot != -1)
         {
             // dot后面是非终结符
@@ -475,5 +409,4 @@ void CFG_LR1::Closure(set<item> &ist)
         }
         que.pop();
     }
-    // cout<<"ending Closure"<<endl;
 }
